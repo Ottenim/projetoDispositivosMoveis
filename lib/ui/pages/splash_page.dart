@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:barber/ui/pages/home_page.dart';
+import 'package:barber/ui/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashPage>
     Timer(const Duration(seconds: 10), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => LoginPage()),
       );
     });
   }
