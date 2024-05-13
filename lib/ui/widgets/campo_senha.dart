@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
@@ -19,7 +18,7 @@ class _PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 25, right: 25, top: 8, bottom: 8),
+      padding: const EdgeInsets.only(top: 8, bottom: 8),
       child: TextFormField(
         controller: widget.controller,
         obscureText: isHidden,
@@ -48,7 +47,10 @@ class _PasswordFieldState extends State<PasswordField> {
         cursorColor: const Color(0xFFFFF112),
         keyboardType: TextInputType.visiblePassword,
         autofillHints: [AutofillHints.password],
+        autofocus: false,
+        /*
         onEditingComplete: () => TextInput.finishAutofillContext(),
+      */
         validator: (password) => password != null && password.length < 5
             ? 'Enter min. 5 characters'
             : null,

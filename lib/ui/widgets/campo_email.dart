@@ -32,7 +32,7 @@ class _EmailFieldWidgetState extends State<EmailFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 25, right: 25, top: 8, bottom: 8),
+      padding: const EdgeInsets.only(top: 8, bottom: 8),
       child: TextFormField(
         controller: widget.controller,
         decoration: InputDecoration(
@@ -55,7 +55,7 @@ class _EmailFieldWidgetState extends State<EmailFieldWidget> {
         cursorColor: const Color(0xFFFFF112),
         keyboardType: TextInputType.emailAddress,
         autofillHints: [AutofillHints.email],
-        autofocus: true,
+        autofocus: false,
         validator: (email) => email != null && !EmailValidator.validate(email)
             ? 'Enter a valid email'
             : null,
