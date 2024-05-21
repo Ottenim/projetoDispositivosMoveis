@@ -1,16 +1,38 @@
-class Barbearia {
-  int id;
-  String nome;
-  String endereco;
-  String latitude;
-  String longitude;
+import 'package:equatable/equatable.dart';
+
+class Barbershop extends Equatable {
+  final int? id;
+  final String? name;
+  final String? address;
+  final String? latitude;
+  final String? longitude;
+
   // foto;
 
-  Barbearia({
-    required this.id,
-    required this.nome,
-    required this.endereco,
-    required this.latitude,
-    required this.longitude,
+  const Barbershop({
+    this.id,
+    this.name,
+    this.address,
+    this.latitude,
+    this.longitude,
   });
+
+  Barbershop copyWith({
+    int? id,
+    String? name,
+    String? address,
+    String? latitude,
+    String? longitude,
+  }) {
+    return Barbershop(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      address: address ?? this.address,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+    );
+  }
+
+  @override
+  List<Object?> get props => [id, name];
 }

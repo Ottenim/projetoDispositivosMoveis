@@ -1,4 +1,4 @@
-import 'package:barber/domain/usuario/Usuario.dart';
+import 'package:barber/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreServices {
@@ -8,33 +8,36 @@ class FirestoreServices {
   ///Agendamento -> Create, Read, Update, Delete
 
   //EX:
-  final CollectionReference usuario =
-      FirebaseFirestore.instance.collection('usuario');
+  final CollectionReference<User> userCollection = FirebaseFirestore.instance.collection('user').withConverter<User>(
+        fromFirestore: (snapshot, options) => User.fromMap(snapshot.data() ?? {}),
+        toFirestore: (value, options) => value.toMap(),
+      );
+
   //CREATE
-  Future<void> addUsuario(Usuario user) {
-    return usuario.add(user);
+  Future<void> addUser(User user) {
+    return userCollection.add(user);
   }
 
   //READ
-  Stream<QuerySnapshot> getUsuarioStream() {
-    final usuarioStream = usuario.orderBy('id', descending: false).snapshots();
+  Future<List<User>> getUsers() async {
+    final userStream = await userCollection.orderBy('id', descending: false).get();
 
-    return usuarioStream;
+    List<User> users = [];
+
+    for (var element in userStream.docs) {
+      users.add(element.data());
+    }
+
+    return users;
   }
 
   //UPDATE
-  Future<void> updateUsuario(int id, Usuario user) {
-    return usuario.doc('$id').update({
-      'id': user.id,
-      'nome': user.nome,
-      'cpf': user.cpf,
-      'senha': user.senha,
-      'categoria': user.categoria
-    });
+  Future<void> updateUser(int id, User user) {
+    return userCollection.doc('$id').update(user.toMap());
   }
 
   //DELETE
-  Future<void> deleteUsuario(int id) {
-    return usuario.doc('$id').delete();
+  Future<void> deleteUser(int id) {
+    return userCollection.doc('$id').delete();
   }
 }
