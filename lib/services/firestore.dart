@@ -14,8 +14,8 @@ class FirestoreServices {
       );
 
   //CREATE
-  Future<void> addUser(User user) {
-    return userCollection.add(user);
+  Future<String> addUser(User user) async {
+    return (await userCollection.add(user)).id;
   }
 
   //READ
@@ -32,12 +32,8 @@ class FirestoreServices {
   }
 
   //UPDATE
-  Future<void> updateUser(int id, User user) {
-    return userCollection.doc('$id').update(user.toMap());
-  }
+  Future<void> updateUser(int id, User user) async => await userCollection.doc('$id').update(user.toMap());
 
   //DELETE
-  Future<void> deleteUser(int id) {
-    return userCollection.doc('$id').delete();
-  }
+  Future<void> deleteUser(int id) async => await userCollection.doc('$id').delete();
 }
