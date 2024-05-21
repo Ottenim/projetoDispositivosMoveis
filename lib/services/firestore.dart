@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreServices {
   ///Temos que ter um Crud para cada model, ou seja:
-  ///Usuario -> Create, Read, Update, Delete
-  ///Barbearia -> Create, Read, Update, Delete
+  ///Usuario -> Create, Read, Update, Deletereate, Read, Update, Delete
+  ///Barbearia -> C
   ///Agendamento -> Create, Read, Update, Delete
 
   //EX:

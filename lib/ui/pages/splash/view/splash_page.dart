@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:barber/ui/pages/login_page.dart';
+import 'package:barber/ui/pages/login/login.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {

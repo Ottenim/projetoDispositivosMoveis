@@ -1,5 +1,5 @@
 import 'package:barber/firebase_options.dart';
-import 'package:barber/ui/pages/splash_page.dart';
+import 'package:barber/ui/pages/splash/view/splash_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 

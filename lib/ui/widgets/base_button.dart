@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class BotaoPadrao extends StatelessWidget {
-  String titulo;
-  Function? onClick;
-  IconData iconData;
+class BaseButton extends StatelessWidget {
+  final String title;
+  final VoidCallback? onPressed;
+  final IconData iconData;
 
-  BotaoPadrao({
+  const BaseButton({
     super.key,
-    required this.titulo,
-    required this.onClick,
+    required this.title,
     required this.iconData,
+    this.onPressed,
   });
 
   @override
@@ -26,11 +26,7 @@ class BotaoPadrao extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          onPressed: () async {
-            await onClick?.call();
-
-            await Future.delayed(const Duration(milliseconds: 100));
-          },
+          onPressed: onPressed,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -51,7 +47,7 @@ class BotaoPadrao extends StatelessWidget {
                 width: 16,
               ),
               Text(
-                titulo,
+                title,
                 style: const TextStyle(color: Colors.white, fontSize: 16),
                 textAlign: TextAlign.start,
               ),

@@ -1,7 +1,9 @@
-import 'package:barber/ui/widgets/botao_padrao.dart';
+import 'package:barber/ui/widgets/base_button.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -28,8 +30,7 @@ class HomePage extends StatelessWidget {
     });
   }
 
-  Widget _addNotificationWidget(
-      BuildContext context, Function(BuildContext) onClick) {
+  Widget _addNotificationWidget(BuildContext context, Function(BuildContext) onPressed) {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: Row(
@@ -43,7 +44,7 @@ class HomePage extends StatelessWidget {
               child: IconButton(
                 splashRadius: 16,
                 onPressed: () {
-                  onClick.call(context);
+                  onPressed.call(context);
                 },
                 icon: const Icon(
                   Icons.notifications_outlined,
@@ -71,25 +72,15 @@ class HomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          BotaoPadrao(
-            titulo: "Agendar",
-            onClick: () {},
+          BaseButton(
+            title: "Agendar",
+            onPressed: () {},
             iconData: Icons.date_range_outlined,
           ),
-          BotaoPadrao(
-              titulo: "Agendamentos",
-              onClick: () {},
-              iconData: Icons.event_available_outlined),
-          BotaoPadrao(
-              titulo: "Lucros",
-              onClick: () {},
-              iconData: Icons.attach_money_outlined),
-          BotaoPadrao(
-              titulo: "Serviços",
-              onClick: () {},
-              iconData: Icons.history_outlined),
-          BotaoPadrao(
-              titulo: "Histórico", onClick: () {}, iconData: Icons.content_cut),
+          BaseButton(title: "Agendamentos", onPressed: () {}, iconData: Icons.event_available_outlined),
+          BaseButton(title: "Lucros", onPressed: () {}, iconData: Icons.attach_money_outlined),
+          BaseButton(title: "Serviços", onPressed: () {}, iconData: Icons.history_outlined),
+          BaseButton(title: "Histórico", onPressed: () {}, iconData: Icons.content_cut),
         ],
       ),
     );

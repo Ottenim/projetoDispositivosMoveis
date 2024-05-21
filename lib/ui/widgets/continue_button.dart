@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class BotaoContinuar extends StatelessWidget {
+class ContinueButton extends StatelessWidget {
   final String text;
   final VoidCallback onClicked;
 
-  const BotaoContinuar({
-    Key? key,
+  const ContinueButton({
+    super.key,
     required this.text,
     required this.onClicked,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
