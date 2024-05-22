@@ -38,7 +38,7 @@ class BaseTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.only(bottom: 4),
       child: TextFormField(
         onTap: onTap,
         controller: controller,
@@ -61,6 +61,10 @@ class BaseTextField extends StatelessWidget {
           disabledBorder: UnderlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
           filled: true,
           hintText: hint,
+          errorBorder: InputBorder.none,
+          errorStyle: TextStyle(fontSize: 10),
+          helperStyle: TextStyle(fontSize: 10),
+          helperText: '',
           prefixIconConstraints: const BoxConstraints(
             maxHeight: 24,
             maxWidth: 50,

@@ -2,6 +2,8 @@ import 'package:barber/ui/widgets/base_button.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
+  static Route route() => MaterialPageRoute(builder: (context) => const HomePage());
+
   const HomePage({super.key});
 
   @override

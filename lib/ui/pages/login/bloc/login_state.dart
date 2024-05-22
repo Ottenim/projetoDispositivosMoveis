@@ -2,7 +2,7 @@ part of 'login_bloc.dart';
 
 class LoginState extends Equatable {
   const LoginState({
-    this.state = PageState.none,
+    this.state = const PageState(PageStatus.none),
     this.email = '',
     this.password = '',
   });
