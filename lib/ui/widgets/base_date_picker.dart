@@ -23,7 +23,7 @@ class BaseDatePicker extends StatelessWidget {
 
     return BaseTextField(
       hint: hint,
-      prefixIcon: SvgPicture.asset('assets/icons/calendar.svg'),
+      prefixIcon: SvgPicture.asset('assets/icons/history.svg'),
       controller: controller,
       readOnly: true,
       onTap: () async {

@@ -1,5 +1,6 @@
-import 'package:barber/ui/widgets/base_button.dart';
+import 'package:barber/ui/widgets/base_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatelessWidget {
   static Route route() => MaterialPageRoute(builder: (context) => const HomePage());
@@ -74,16 +75,63 @@ class HomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          BaseButton(
+          HomeCard(
             title: "Agendar",
-            onPressed: () {},
-            iconData: Icons.date_range_outlined,
+            icon: 'assets/icons/calendar.svg',
+            onTap: () {},
           ),
-          BaseButton(title: "Agendamentos", onPressed: () {}, iconData: Icons.event_available_outlined),
-          BaseButton(title: "Lucros", onPressed: () {}, iconData: Icons.attach_money_outlined),
-          BaseButton(title: "Serviços", onPressed: () {}, iconData: Icons.history_outlined),
-          BaseButton(title: "Histórico", onPressed: () {}, iconData: Icons.content_cut),
+          HomeCard(
+            title: "Meus agendamentos",
+            icon: 'assets/icons/clipboard_check.svg',
+            onTap: () {},
+          ),
+          HomeCard(
+            title: "Serviços",
+            icon: 'assets/icons/scissors.svg',
+            onTap: () {},
+          ),
+          HomeCard(
+            title: "Histórico",
+            icon: 'assets/icons/history.svg',
+            onTap: () {},
+          ),
+          HomeCard(
+            title: "Meu perfil",
+            icon: 'assets/icons/user.svg',
+            onTap: () {},
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class HomeCard extends StatelessWidget {
+  const HomeCard({this.title, this.onTap, this.icon});
+
+  final String? title;
+  final GestureTapCallback? onTap;
+  final String? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseCard(
+      onTap: onTap,
+      child: ListTile(
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(color: Color(0xffFFF112), borderRadius: BorderRadius.circular(6)),
+          child: SvgPicture.asset(
+            icon ?? '',
+            width: 24,
+            height: 24,
+            colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
+          ),
+        ),
+        title: Text(
+          title ?? '',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+        ),
       ),
     );
   }

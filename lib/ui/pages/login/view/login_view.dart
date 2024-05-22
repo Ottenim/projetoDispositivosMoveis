@@ -2,6 +2,7 @@ import 'package:barber/infra/extensions/integer.dart';
 import 'package:barber/ui/pages/home_page.dart';
 import 'package:barber/ui/pages/login/login.dart';
 import 'package:barber/ui/pages/user_register/view/user_register_page.dart';
+import 'package:barber/ui/widgets/base_button.dart';
 import 'package:barber/ui/widgets/widgets.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -58,9 +59,9 @@ class LoginView extends StatelessWidget {
             ),
             const ForgotPassword(),
             20.toSizedBoxH(),
-            ContinueButton(
-              text: "Continuar",
-              onClicked: () => Navigator.of(context).pushReplacement(HomePage.route()),
+            BaseButton(
+              title: "Continuar",
+              onPressed: () => Navigator.of(context).pushReplacement(HomePage.route()),
             ),
             20.toSizedBoxH(),
             NewAccount(),

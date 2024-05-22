@@ -21,6 +21,7 @@ class BaseButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xffFFF112),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          minimumSize: const Size.fromHeight(44),
         ),
         onPressed: onPressed,
         child: Text(
