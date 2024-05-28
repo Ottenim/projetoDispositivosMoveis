@@ -20,7 +20,7 @@ class PageState {
 
   factory PageState.none() => const PageState(PageStatus.none);
 
-  factory PageState.success(String? info, {dynamic data}) => PageState(PageStatus.success, info: info, data: data);
+  factory PageState.success({String? info, dynamic data}) => PageState(PageStatus.success, info: info, data: data);
 
   factory PageState.error([String? info]) => PageState(PageStatus.error, info: info);
 }

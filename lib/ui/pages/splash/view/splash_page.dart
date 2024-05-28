@@ -4,6 +4,8 @@ import 'package:barber/ui/pages/login/login.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
+  static Route route() => MaterialPageRoute(builder: (context) => SplashPage());
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }

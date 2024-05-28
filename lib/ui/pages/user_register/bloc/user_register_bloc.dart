@@ -51,7 +51,7 @@ class UserRegisterBloc extends Bloc<UserRegisterEvent, UserRegisterState> {
       try {
         // REGRA PARA INSERIR O USUÁRIO
 
-        emit(state.copyWith(state: PageState.success('Usuário criado', data: User())));
+        emit(state.copyWith(state: PageState.success(info: 'Usuário criado', data: User())));
       } catch (e) {
         emit(state.copyWith(state: PageState.error('Erro ao criar usuário')));
       }

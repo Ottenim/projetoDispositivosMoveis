@@ -1,0 +1,21 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
+enum PrefsKeys { userProperty }
+
+class Prefs {
+  static SharedPreferences? _instance;
+
+  static Future<SharedPreferences?> _getInstance() async {
+    _instance ??= await SharedPreferences.getInstance();
+
+    return _instance;
+  }
+
+  static Future<String?> getString(PrefsKeys key) async {
+    return (await _getInstance())?.getString(key.toString());
+  }
+
+  static Future<void> setString(PrefsKeys key, String value) async {
+    (await _getInstance())?.setString(key.toString(), value);
+  }
+}

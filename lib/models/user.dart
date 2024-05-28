@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 enum Category { admin, barber, client }
 
 class User extends Equatable {
-  final int? id;
+  final String? id;
   final String? name;
   final Category? category;
   final String? cpf;
@@ -38,7 +38,7 @@ class User extends Equatable {
   }
 
   User copyWith({
-    int? id,
+    String? id,
     String? name,
     Category? category,
     String? cpf,
