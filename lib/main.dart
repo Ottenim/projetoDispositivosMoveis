@@ -3,6 +3,7 @@ import 'package:barber/repositories/user_repository.dart';
 import 'package:barber/ui/pages/authentication/authentication_bloc.dart';
 import 'package:barber/ui/pages/home_page.dart';
 import 'package:barber/ui/pages/login/login.dart';
+import 'package:barber/ui/pages/login/view/view.dart';
 import 'package:barber/ui/pages/splash/view/splash_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,11 +17,11 @@ void main() async {
 
   FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: true);
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
 
   // This widget is the root of your application.
   @override
@@ -30,14 +31,14 @@ class MyApp extends StatelessWidget {
       child: BlocProvider<AuthenticationBloc>(
         create: (context) => AuthenticationBloc(context.read<UserRepository>())..add(AuthenticationInitialValidation()),
         child: MaterialApp(
+          navigatorKey: globalKey,
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
             colorScheme: const ColorScheme.dark(),
             useMaterial3: true,
           ),
-          onGenerateRoute: (settings) => SplashPage.route(),
-          builder: (context, child) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
             buildWhen: (previous, current) => previous.authenticationUser != current.authenticationUser,
             builder: (context, state) {
               switch (state.authenticationUser) {
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
               }
             },
           ),
+          onGenerateRoute: (settings) => SplashPage.route(),
         ),
       ),
     );

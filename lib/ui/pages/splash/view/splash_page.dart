@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:barber/ui/pages/login/login.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -27,13 +24,6 @@ class _SplashScreenState extends State<SplashPage>
     )..repeat(reverse: true);
 
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
-
-    Timer(const Duration(seconds: 10), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
-    });
   }
 
   @override
