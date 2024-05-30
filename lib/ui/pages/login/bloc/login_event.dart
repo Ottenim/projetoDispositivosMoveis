@@ -7,10 +7,10 @@ class LoginEvent extends Equatable {
   List<Object?> get props => throw UnimplementedError();
 }
 
-class LoginEmailChanged extends LoginEvent {
-  const LoginEmailChanged(this.email);
+class LoginCpfChanged extends LoginEvent {
+  const LoginCpfChanged(this.cpf);
 
-  final String email;
+  final String cpf;
 }
 
 class LoginPasswordChanged extends LoginEvent {
@@ -18,3 +18,5 @@ class LoginPasswordChanged extends LoginEvent {
 
   final String password;
 }
+
+class LoginContinuePressed extends LoginEvent {}

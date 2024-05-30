@@ -1,12 +1,10 @@
 import 'package:barber/infra/extensions/integer.dart';
-import 'package:barber/ui/pages/home_page.dart';
 import 'package:barber/ui/pages/login/login.dart';
 import 'package:barber/ui/pages/user_register/view/user_register_page.dart';
-import 'package:barber/ui/widgets/base_button.dart';
 import 'package:barber/ui/widgets/widgets.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -16,56 +14,64 @@ class LoginView extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(left: 25, right: 25, top: 8, bottom: 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Row(
-              children: [
-                Text(
-                  "Bem vindo!",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
+        child: Form(
+          key: context.read<LoginBloc>().formKey,
+          autovalidateMode: AutovalidateMode.disabled,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Row(
+                children: [
+                  Text(
+                    "Bem vindo!",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const Row(
-              children: [
-                Text(
-                  "Entre na sua conta",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
+                ],
+              ),
+              const Row(
+                children: [
+                  Text(
+                    "Entre na sua conta",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            20.toSizedBoxH(),
-            BaseTextField(
-              hint: 'E-mail',
-              prefixIcon: const Icon(Icons.email_outlined),
-              autofillHints: const [AutofillHints.email],
-              validator: (value) => EmailValidator.validate(value ?? '') ? 'Enter a valid email' : null,
-              onChanged: (value) => context.read<LoginBloc>().add(LoginEmailChanged(value)),
-            ),
-            BaseTextField(
-              hint: 'Senha',
-              prefixIcon: Icon(Icons.lock_outline_rounded),
-              keyboardType: TextInputType.visiblePassword,
-              autofillHints: [AutofillHints.password],
-              onChanged: (value) => context.read<LoginBloc>().add(LoginPasswordChanged(value)),
-            ),
-            const ForgotPassword(),
-            20.toSizedBoxH(),
-            BaseButton(
-              title: "Continuar",
-              onPressed: () => Navigator.of(context).pushReplacement(HomePage.route()),
-            ),
-            20.toSizedBoxH(),
-            NewAccount(),
-          ],
+                ],
+              ),
+              20.toSizedBoxH(),
+              BaseTextField(
+                hint: 'CPF',
+                prefixIcon: const Icon(Icons.email_outlined),
+                keyboardType: TextInputType.number,
+                inputFormatters: [MaskTextInputFormatter(mask: '###.###.###-##')],
+                validator: (value) {
+                  return value?.split('.').join('').replaceFirst('-', '').length != 11 ? 'Enter a valid cpf' : null;
+                },
+                onChanged: (value) => context.read<LoginBloc>().add(LoginCpfChanged(value)),
+              ),
+              BaseTextField(
+                hint: 'Senha',
+                obscureText: true,
+                prefixIcon: Icon(Icons.lock_outline_rounded),
+                keyboardType: TextInputType.visiblePassword,
+                autofillHints: [AutofillHints.password],
+                onChanged: (value) => context.read<LoginBloc>().add(LoginPasswordChanged(value)),
+              ),
+              const ForgotPassword(),
+              20.toSizedBoxH(),
+              BaseButton(
+                title: "Continuar",
+                onPressed: () => context.read<LoginBloc>().add(LoginContinuePressed()),
+              ),
+              20.toSizedBoxH(),
+              NewAccount(),
+            ],
+          ),
         ),
       ),
     );

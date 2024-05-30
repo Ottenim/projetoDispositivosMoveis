@@ -13,10 +13,10 @@ class UserRegisterNameChanged extends UserRegisterEvent {
   final String name;
 }
 
-class UserRegisterEmailChanged extends UserRegisterEvent {
-  const UserRegisterEmailChanged(this.email);
+class UserRegisterCpfChanged extends UserRegisterEvent {
+  const UserRegisterCpfChanged(this.cpf);
 
-  final String email;
+  final String cpf;
 }
 
 class UserRegisterPasswordChanged extends UserRegisterEvent {

@@ -3,6 +3,7 @@ import 'package:barber/ui/pages/user_register/view/user_register_view.dart';
 import 'package:barber/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class UserRegisterPage extends StatelessWidget {
   static Route route() => MaterialPageRoute(builder: (context) => const UserRegisterPage());
@@ -16,10 +17,12 @@ class UserRegisterPage extends StatelessWidget {
       child: BlocListener<UserRegisterBloc, UserRegisterState>(
         listenWhen: (previous, current) => previous.state != current.state,
         listener: (context, state) {
-          if (state.state == PageState.success) {
+          if (state.state.status == PageStatus.success) {
+            Fluttertoast.showToast(msg: 'Usuário criado!');
+
             Navigator.of(context).pop();
           } else {
-            showDialog(context: context, builder: (context) => Text('DEU RUIM'));
+            Fluttertoast.showToast(msg: state.state.info ?? '');
           }
         },
         child: Scaffold(

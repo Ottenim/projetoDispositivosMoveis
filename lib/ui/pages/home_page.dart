@@ -1,3 +1,4 @@
+import 'package:barber/infra/extensions/integer.dart';
 import 'package:barber/ui/widgets/base_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -80,21 +81,25 @@ class HomePage extends StatelessWidget {
             icon: 'assets/icons/calendar.svg',
             onTap: () {},
           ),
+          12.toSizedBoxH(),
           HomeCard(
             title: "Meus agendamentos",
             icon: 'assets/icons/clipboard_check.svg',
             onTap: () {},
           ),
+          12.toSizedBoxH(),
           HomeCard(
             title: "Serviços",
             icon: 'assets/icons/scissors.svg',
             onTap: () {},
           ),
+          12.toSizedBoxH(),
           HomeCard(
             title: "Histórico",
             icon: 'assets/icons/history.svg',
             onTap: () {},
           ),
+          12.toSizedBoxH(),
           HomeCard(
             title: "Meu perfil",
             icon: 'assets/icons/user.svg',

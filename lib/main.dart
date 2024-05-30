@@ -4,6 +4,7 @@ import 'package:barber/ui/pages/authentication/authentication_bloc.dart';
 import 'package:barber/ui/pages/home_page.dart';
 import 'package:barber/ui/pages/login/login.dart';
 import 'package:barber/ui/pages/login/view/view.dart';
+import 'package:barber/ui/pages/splash/splash.dart';
 import 'package:barber/ui/pages/splash/view/splash_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,7 +22,9 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
+  MyApp({super.key});
+
+  final GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
 
   // This widget is the root of your application.
   @override
@@ -38,20 +41,19 @@ class MyApp extends StatelessWidget {
             colorScheme: const ColorScheme.dark(),
             useMaterial3: true,
           ),
-          home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            buildWhen: (previous, current) => previous.authenticationUser != current.authenticationUser,
-            builder: (context, state) {
+          home: BlocListener<AuthenticationBloc, AuthenticationState>(
+            listenWhen: (previous, current) => previous.authenticationUser != current.authenticationUser,
+            listener: (context, state) {
               switch (state.authenticationUser) {
                 case AuthenticationUser.authenticated:
-                  return HomePage();
-                case AuthenticationUser.unauthenticated:
-                  return LoginPage();
+                  globalKey.currentState?.pushReplacement(HomePage.route());
                 case AuthenticationUser.none:
-                  return SplashPage();
+                case AuthenticationUser.unauthenticated:
+                  globalKey.currentState?.pushReplacement(LoginPage.route());
               }
             },
+            child: SplashPage(),
           ),
-          onGenerateRoute: (settings) => SplashPage.route(),
         ),
       ),
     );

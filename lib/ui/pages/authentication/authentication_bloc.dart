@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:barber/repositories/user_repository.dart';
 import 'package:barber/utils/utils.dart';
@@ -29,25 +30,24 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     AuthenticationInitialValidation event,
     Emitter<AuthenticationState> emit,
   ) async {
-    emit(state.copyWith(state: PageState.loading()));
-
     await Future.delayed(Duration(seconds: 2));
 
     try {
       String? jsonUser = await Prefs.getString(PrefsKeys.userProperty);
 
       if (jsonUser != null) {
-        await userRepository.setUser(jsonUser);
+        Map<String, dynamic> values = json.decode(jsonUser);
+
+        await userRepository.setUser(values['id'], values);
 
         authController.add(AuthenticationUser.authenticated);
+        return;
       }
     } catch (e) {
       authController.add(AuthenticationUser.unauthenticated);
-
-      emit(state.copyWith(state: PageState.error()));
     }
 
-    authController.add(AuthenticationUser.unauthenticated);
+    authController.add(AuthenticationUser.none);
   }
 
   FutureOr<void> _onStateChanged(

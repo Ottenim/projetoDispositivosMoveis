@@ -19,8 +19,8 @@ class User extends Equatable {
     this.password,
   });
 
-  factory User.fromMap(Map<String, dynamic> map) => User(
-        id: map['id'],
+  factory User.fromMap(String id, Map<String, dynamic> map) => User(
+        id: id,
         name: map['name'],
         category: Category.values[map['category']],
         cpf: map['cpf'],
@@ -29,7 +29,6 @@ class User extends Equatable {
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {};
-    map['id'] = id;
     map['name'] = name;
     map['category'] = category?.index ?? 0;
     map['cpf'] = cpf;
