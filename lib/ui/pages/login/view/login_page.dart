@@ -1,5 +1,5 @@
 import 'package:barber/repositories/repositories.dart';
-import 'package:barber/ui/pages/home_page.dart';
+import 'package:barber/ui/pages/home/view/home_page.dart';
 import 'package:barber/ui/pages/login/bloc/login_bloc.dart';
 import 'package:barber/ui/pages/login/view/login_view.dart';
 import 'package:barber/utils/page_state.dart';

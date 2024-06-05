@@ -1,7 +1,13 @@
 import 'package:barber/infra/extensions/integer.dart';
+import 'package:barber/main.dart';
+import 'package:barber/repositories/repositories.dart';
+import 'package:barber/ui/pages/home/bloc/home_bloc.dart';
+import 'package:barber/ui/pages/login/login.dart';
 import 'package:barber/ui/pages/profile/view/view.dart';
 import 'package:barber/ui/widgets/base_card.dart';
+import 'package:barber/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,24 +19,35 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Scaffold(
-          body: SingleChildScrollView(
-            child: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  const SizedBox(
-                    height: 20,
+        return BlocProvider<HomeBloc>(
+          create: (context) => HomeBloc(context.read<UserRepository>()),
+          child: BlocListener<HomeBloc, HomeState>(
+            listenWhen: (previous, current) => previous.state != current.state,
+            listener: (context, state) {
+              if (state.state.status == PageStatus.success) {
+                globalKey.currentState?.pushReplacement(LoginPage.route());
+              }
+            },
+            child: Scaffold(
+              body: SingleChildScrollView(
+                child: SafeArea(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      HeaderButtons(),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 15.0),
+                        child: _addLogo(),
+                      ),
+                      HomeButtons(),
+                    ],
                   ),
-                  _addNotificationWidget(context, (ctx) => {}),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15.0),
-                    child: _addLogo(),
-                  ),
-                  HomeButtons(),
-                ],
+                ),
               ),
             ),
           ),
@@ -39,7 +56,19 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _addNotificationWidget(BuildContext context, Function(BuildContext) onPressed) {
+  Widget _addLogo() {
+    return SizedBox(
+      height: 100,
+      child: Image.asset('assets/images/logo.png'),
+    );
+  }
+}
+
+class HeaderButtons extends StatelessWidget {
+  const HeaderButtons({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: Row(
@@ -52,9 +81,7 @@ class HomePage extends StatelessWidget {
               cursor: SystemMouseCursors.click,
               child: IconButton(
                 splashRadius: 16,
-                onPressed: () {
-                  onPressed.call(context);
-                },
+                onPressed: () {},
                 icon: const Icon(
                   Icons.notifications_outlined,
                   size: 20,
@@ -62,15 +89,22 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
+          Tooltip(
+            message: '',
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: IconButton(
+                splashRadius: 16,
+                onPressed: () => context.read<HomeBloc>().add(HomeLogout()),
+                icon: const Icon(
+                  Icons.logout_rounded,
+                  size: 20,
+                ),
+              ),
+            ),
+          )
         ],
       ),
-    );
-  }
-
-  Widget _addLogo() {
-    return SizedBox(
-      height: 100,
-      child: Image.asset('assets/images/logo.png'),
     );
   }
 }

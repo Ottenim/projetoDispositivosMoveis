@@ -1,7 +1,7 @@
 import 'package:barber/firebase_options.dart';
 import 'package:barber/repositories/user_repository.dart';
 import 'package:barber/ui/pages/authentication/authentication_bloc.dart';
-import 'package:barber/ui/pages/home_page.dart';
+import 'package:barber/ui/pages/home/view/home_page.dart';
 import 'package:barber/ui/pages/login/login.dart';
 import 'package:barber/ui/pages/login/view/view.dart';
 import 'package:barber/ui/pages/splash/splash.dart';

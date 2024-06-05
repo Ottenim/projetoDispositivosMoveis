@@ -18,4 +18,6 @@ class Prefs {
   static Future<void> setString(PrefsKeys key, String? value) async {
     (await _getInstance())?.setString(key.toString(), value ?? '');
   }
+
+  static Future<void> clear() async => await (await _getInstance())?.clear();
 }
