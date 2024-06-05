@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:validadores/Validador.dart';
 
 class UserRegisterView extends StatelessWidget {
   const UserRegisterView({super.key});
@@ -53,7 +54,8 @@ class UserRegisterView extends StatelessWidget {
               ),
               BaseTextField(
                 hint: 'CPF',
-                validator: (value) => value == null || value.isEmpty ? 'Required field' : null,
+                validator: (value) =>
+                    Validador().add(Validar.CPF, msg: 'Cpf inválido').add(Validar.OBRIGATORIO, msg: 'Campo obrigatório').validar(value),
                 prefixIcon: const Icon(Icons.email_outlined),
                 keyboardType: TextInputType.number,
                 inputFormatters: [MaskTextInputFormatter(mask: '###.###.###-##')],

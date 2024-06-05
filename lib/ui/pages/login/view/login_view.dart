@@ -51,7 +51,7 @@ class LoginView extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 inputFormatters: [MaskTextInputFormatter(mask: '###.###.###-##')],
                 validator: (value) =>
-                    Validador().add(Validar.CPF, msg: 'Cpf inválido').add(Validar.OBRIGATORIO, msg: 'Campo obrigatório').validar(value),
+                    Validador().add(Validar.OBRIGATORIO, msg: 'Campo obrigatório').validar(value),
                 onChanged: (value) => context.read<LoginBloc>().add(LoginCpfChanged(value)),
               ),
               BaseTextField(
