@@ -20,7 +20,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   final UserRepository userRepository;
 
-  StreamController<AuthenticationUser> authController = StreamController();
+  StreamController<AuthenticationUser> authController = StreamController.broadcast();
 
   Stream<AuthenticationUser> get _authStream async* {
     yield* authController.stream;

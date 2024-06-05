@@ -1,4 +1,5 @@
 import 'package:barber/infra/extensions/integer.dart';
+import 'package:barber/ui/pages/profile/view/view.dart';
 import 'package:barber/ui/widgets/base_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,28 +11,32 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const SizedBox(
-                height: 20,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Scaffold(
+          body: SingleChildScrollView(
+            child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  _addNotificationWidget(context, (ctx) => {}),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15.0),
+                    child: _addLogo(),
+                  ),
+                  HomeButtons(),
+                ],
               ),
-              _addNotificationWidget(context, (ctx) => {}),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 15.0),
-                child: _addLogo(),
-              ),
-              _addBotoes(),
-            ],
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   Widget _addNotificationWidget(BuildContext context, Function(BuildContext) onPressed) {
@@ -68,8 +73,13 @@ class HomePage extends StatelessWidget {
       child: Image.asset('assets/images/logo.png'),
     );
   }
+}
 
-  Widget _addBotoes() {
+class HomeButtons extends StatelessWidget {
+  const HomeButtons({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Column(
@@ -103,7 +113,7 @@ class HomePage extends StatelessWidget {
           HomeCard(
             title: "Meu perfil",
             icon: 'assets/icons/user.svg',
-            onTap: () {},
+            onTap: () => Navigator.of(context).push(ProfilePage.route()),
           ),
         ],
       ),

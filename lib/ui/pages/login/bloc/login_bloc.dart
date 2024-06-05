@@ -4,7 +4,7 @@ import 'package:barber/models/models.dart';
 import 'package:barber/repositories/repositories.dart';
 import 'package:barber/services/services.dart';
 import 'package:barber/utils/utils.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 

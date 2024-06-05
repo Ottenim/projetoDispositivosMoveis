@@ -4,11 +4,11 @@ enum AuthenticationUser { none, authenticated, unauthenticated }
 
 class AuthenticationState extends Equatable {
   const AuthenticationState({
-    this.authenticationUser = AuthenticationUser.none,
+    this.authenticationUser,
     this.state = const PageState(PageStatus.none),
   });
 
-  final AuthenticationUser authenticationUser;
+  final AuthenticationUser? authenticationUser;
   final PageState state;
 
   AuthenticationState copyWith({

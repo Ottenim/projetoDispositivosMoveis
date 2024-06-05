@@ -18,11 +18,13 @@ class BaseTextField extends StatelessWidget {
     this.maxLength,
     this.autofillHints,
     this.validator,
+    this.initialValue,
   });
 
   final String? hint;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
+  final String? initialValue;
   final bool enabled;
   final bool readOnly;
   final bool obscureText;
@@ -40,6 +42,7 @@ class BaseTextField extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(bottom: 4),
       child: TextFormField(
+        initialValue: initialValue,
         onTap: onTap,
         controller: controller,
         cursorColor: Colors.white,

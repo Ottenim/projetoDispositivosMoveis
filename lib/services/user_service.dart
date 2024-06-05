@@ -51,8 +51,8 @@ class UserService {
   }
 
   //UPDATE
-  Future<void> updateUser(int id, User user) async => await _userCollection.doc('$id').update(user.toMap());
+  Future<void> updateUser(String id, User user) async => await _userCollection.doc(id).update(user.toMap());
 
   //DELETE
-  Future<void> deleteUser(int id) async => await _userCollection.doc('$id').delete();
+  Future<void> deleteUser(String id) async => await _userCollection.doc(id).delete();
 }

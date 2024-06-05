@@ -5,6 +5,7 @@ import 'package:barber/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:validadores/Validador.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -49,9 +50,8 @@ class LoginView extends StatelessWidget {
                 prefixIcon: const Icon(Icons.email_outlined),
                 keyboardType: TextInputType.number,
                 inputFormatters: [MaskTextInputFormatter(mask: '###.###.###-##')],
-                validator: (value) {
-                  return value?.split('.').join('').replaceFirst('-', '').length != 11 ? 'Enter a valid cpf' : null;
-                },
+                validator: (value) =>
+                    Validador().add(Validar.OBRIGATORIO, msg: 'Campo obrigatório').validar(value),
                 onChanged: (value) => context.read<LoginBloc>().add(LoginCpfChanged(value)),
               ),
               BaseTextField(
