@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 class Scheduling extends Equatable {
-  final int? id;
+  final String? id;
   final DateTime? day;
   final TimeOfDay? hour;
   final int? clientId;
@@ -16,8 +16,25 @@ class Scheduling extends Equatable {
     this.clientId,
   });
 
+  factory Scheduling.fromMap(String id, Map<String, dynamic> map) => Scheduling(
+        id: id,
+        day: map['day'],
+        hour: map['hour'],
+        clientId: map['clientId'],
+        attendantId: map['attendantId'],
+      );
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {};
+    map['day'] = day;
+    map['hour'] = hour;
+    map['clientId'] = clientId;
+    map['attendantId'] = attendantId;
+    return map;
+  }
+
   Scheduling copyWith({
-    int? id,
+    String? id,
     DateTime? day,
     TimeOfDay? hour,
     int? clientId,
