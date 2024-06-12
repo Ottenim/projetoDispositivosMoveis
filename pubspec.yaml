@@ -47,6 +47,7 @@ dependencies:
   fluttertoast: ^8.2.5
   validadores: ^1.0.9
   mask_text_input_formatter: ^2.9.0
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
