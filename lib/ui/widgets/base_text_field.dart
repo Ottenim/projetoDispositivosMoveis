@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+enum FieldType { normal, expanded }
+
 class BaseTextField extends StatelessWidget {
   const BaseTextField({
     super.key,
@@ -19,6 +21,8 @@ class BaseTextField extends StatelessWidget {
     this.autofillHints,
     this.validator,
     this.initialValue,
+    this.fieldType = FieldType.normal,
+    this.textDirection,
   });
 
   final String? hint;
@@ -36,10 +40,12 @@ class BaseTextField extends StatelessWidget {
   final int? maxLength;
   final Iterable<String>? autofillHints;
   final FormFieldValidator<String>? validator;
+  final FieldType fieldType;
+  final TextDirection? textDirection;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: TextFormField(
         initialValue: initialValue,
@@ -48,7 +54,8 @@ class BaseTextField extends StatelessWidget {
         cursorColor: Colors.white,
         enabled: enabled,
         readOnly: readOnly,
-        keyboardType: keyboardType,
+        textDirection: textDirection,
+        keyboardType: keyboardType ?? (fieldType == FieldType.expanded ? TextInputType.multiline : null),
         onChanged: onChanged,
         inputFormatters: [
           FilteringTextInputFormatter.singleLineFormatter,
@@ -58,6 +65,7 @@ class BaseTextField extends StatelessWidget {
         maxLength: maxLength,
         autofillHints: autofillHints,
         validator: validator,
+        maxLines: fieldType == FieldType.normal ? 1 : 4,
         decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
           focusedBorder: UnderlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),

@@ -4,6 +4,8 @@ import 'package:barber/repositories/repositories.dart';
 import 'package:barber/ui/pages/home/bloc/home_bloc.dart';
 import 'package:barber/ui/pages/login/login.dart';
 import 'package:barber/ui/pages/profile/view/view.dart';
+import 'package:barber/ui/pages/schedule/view/schedule_page.dart';
+import 'package:barber/ui/pages/services/view/service_page.dart';
 import 'package:barber/ui/widgets/base_card.dart';
 import 'package:barber/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -123,7 +125,7 @@ class HomeButtons extends StatelessWidget {
           HomeCard(
             title: "Agendar",
             icon: 'assets/icons/calendar.svg',
-            onTap: () {},
+            onTap: () => Navigator.of(context).push(SchedulePage.route()),
           ),
           12.toSizedBoxH(),
           HomeCard(
@@ -135,7 +137,7 @@ class HomeButtons extends StatelessWidget {
           HomeCard(
             title: "Serviços",
             icon: 'assets/icons/scissors.svg',
-            onTap: () {},
+            onTap: () => Navigator.of(context).push(ServicePage.route()),
           ),
           12.toSizedBoxH(),
           HomeCard(

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class SchedulePage extends StatefulWidget {
+  static Route route() => MaterialPageRoute(builder: (context) => SchedulePage());
+
   @override
   _SchedulePageState createState() => _SchedulePageState();
 }

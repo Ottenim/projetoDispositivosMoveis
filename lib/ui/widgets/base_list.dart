@@ -13,13 +13,19 @@ class BaseList<T> extends StatelessWidget {
   final List<T> items;
   final Widget Function(BuildContext context, T item) itemBuilder;
   final PageState? state;
-  final RefreshCallback? onRefresh;
+  final Function? onRefresh;
   final String? emptyInfo;
 
   @override
   Widget build(BuildContext context) {
-    if (state?.status == PageStatus.loading) {
-      return const Center(child: CircularProgressIndicator());
+    switch (state?.status ?? PageStatus.none) {
+      case PageStatus.error:
+        return const Center(child: Text('Ops, erro inesperado!'));
+      case PageStatus.loading:
+        return const Center(child: CircularProgressIndicator());
+      case PageStatus.none:
+      case PageStatus.success:
+        break;
     }
 
     if (items.isEmpty) {
@@ -32,7 +38,7 @@ class BaseList<T> extends StatelessWidget {
     );
 
     if (onRefresh != null) {
-      widget = RefreshIndicator(onRefresh: onRefresh!, child: widget);
+      widget = RefreshIndicator(onRefresh: () async => onRefresh?.call(), child: widget);
     }
 
     return widget;
