@@ -5,6 +5,11 @@
         android:label="barber"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <!-- Configuração da API do Google Maps -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCTSKfKcdamHgTyLqrCE77PpEJ-7wM3oDw"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
