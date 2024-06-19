@@ -2,6 +2,7 @@ import 'package:barber/infra/extensions/integer.dart';
 import 'package:barber/main.dart';
 import 'package:barber/repositories/repositories.dart';
 import 'package:barber/ui/pages/home/bloc/home_bloc.dart';
+import 'package:barber/ui/pages/location/view/location_page.dart';
 import 'package:barber/ui/pages/login/login.dart';
 import 'package:barber/ui/pages/profile/view/view.dart';
 import 'package:barber/ui/pages/schedule/view/schedule_page.dart';
@@ -150,6 +151,12 @@ class HomeButtons extends StatelessWidget {
             title: "Meu perfil",
             icon: 'assets/icons/user.svg',
             onTap: () => Navigator.of(context).push(ProfilePage.route()),
+          ),
+          12.toSizedBoxH(),
+          HomeCard(
+            title: "Localização",
+            icon: 'assets/icons/location.svg',
+            onTap: () => Navigator.of(context).push(LocationPage.route()),
           ),
         ],
       ),
