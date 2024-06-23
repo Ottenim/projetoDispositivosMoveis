@@ -4,6 +4,7 @@ import 'package:barber/repositories/repositories.dart';
 import 'package:barber/ui/pages/home/bloc/home_bloc.dart';
 import 'package:barber/ui/pages/location/view/location_page.dart';
 import 'package:barber/ui/pages/login/login.dart';
+import 'package:barber/ui/pages/professional_register/view/professional_register_page.dart';
 import 'package:barber/ui/pages/profile/view/view.dart';
 import 'package:barber/ui/pages/schedule/view/schedule_page.dart';
 import 'package:barber/ui/pages/services/view/service_page.dart';
@@ -14,7 +15,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatelessWidget {
-  static Route route() => MaterialPageRoute(builder: (context) => const HomePage());
+  static Route route() =>
+      MaterialPageRoute(builder: (context) => const HomePage());
 
   const HomePage({super.key});
 
@@ -158,6 +160,12 @@ class HomeButtons extends StatelessWidget {
             icon: 'assets/icons/location.svg',
             onTap: () => Navigator.of(context).push(LocationPage.route()),
           ),
+          HomeCard(
+            title: "Cadastro de profissionais",
+            icon: 'assets/icons/professional.svg',
+            onTap: () =>
+                Navigator.of(context).push(ProfessionalRegisterPage.route()),
+          )
         ],
       ),
     );
@@ -178,7 +186,8 @@ class HomeCard extends StatelessWidget {
       child: ListTile(
         leading: Container(
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(color: Color(0xffFFF112), borderRadius: BorderRadius.circular(6)),
+          decoration: BoxDecoration(
+              color: Color(0xffFFF112), borderRadius: BorderRadius.circular(6)),
           child: SvgPicture.asset(
             icon ?? '',
             width: 24,
