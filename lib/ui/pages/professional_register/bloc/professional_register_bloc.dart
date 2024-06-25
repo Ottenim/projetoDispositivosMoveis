@@ -25,7 +25,7 @@ class ProfessionalRegisterBloc
     emit(state.copyWith(state: PageState.loading()));
 
     try {
-      List<User> users = await userService.getUsers();
+      List<User> users = await userService.getUsersByCategory();
 
       emit(state.copyWith(state: PageState.success(), users: users));
     } catch (e) {

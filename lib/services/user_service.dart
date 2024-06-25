@@ -14,10 +14,12 @@ class UserService {
   late final CollectionReference<User> _userCollection;
 
   UserService() {
-    _userCollection = _firestore.collection(USERS_COLLECTION).withConverter<User>(
-          fromFirestore: (snapshot, options) => User.fromMap(snapshot.id, snapshot.data() ?? {}),
-          toFirestore: (value, options) => value.toMap(),
-        );
+    _userCollection =
+        _firestore.collection(USERS_COLLECTION).withConverter<User>(
+              fromFirestore: (snapshot, options) =>
+                  User.fromMap(snapshot.id, snapshot.data() ?? {}),
+              toFirestore: (value, options) => value.toMap(),
+            );
   }
 
   //CREATE
@@ -39,7 +41,23 @@ class UserService {
 
   //READ
   Future<List<User>> getUsers() async {
-    final userStream = await _userCollection.orderBy('id', descending: false).get();
+    final userStream =
+        await _userCollection.orderBy('name', descending: false).get();
+
+    List<User> users = [];
+
+    for (var element in userStream.docs) {
+      users.add(element.data());
+    }
+
+    return users;
+  }
+
+  Future<List<User>> getUsersByCategory() async {
+    final userStream = await _userCollection
+        .where(Filter.or(Filter('userCategory', isEqualTo: 1),
+            Filter('userCategory', isEqualTo: 2)))
+        .get();
 
     List<User> users = [];
 
@@ -51,8 +69,10 @@ class UserService {
   }
 
   //UPDATE
-  Future<void> updateUser(String id, User user) async => await _userCollection.doc(id).update(user.toMap());
+  Future<void> updateUser(String id, User user) async =>
+      await _userCollection.doc(id).update(user.toMap());
 
   //DELETE
-  Future<void> deleteUser(String id) async => await _userCollection.doc(id).delete();
+  Future<void> deleteUser(String id) async =>
+      await _userCollection.doc(id).delete();
 }

@@ -15,14 +15,12 @@ class ProfessionalRegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ProfessionalRegisterBloc>(
-      create: (context) => ProfessionalRegisterBloc(),
+      create: (context) => ProfessionalRegisterBloc()..add(UsersFetch()),
       child: BlocListener<ProfessionalRegisterBloc, ProfessionalRegisterState>(
         listenWhen: (previous, current) =>
             previous.itemState != current.itemState,
         listener: (context, state) async {
           if (state.itemState.status == PageStatus.success) {
-            // dynamic result = await Navigator.of(context, rootNavigator: true)
-            //     .push(ProfessionalRegisterView.route(user: state.itemState.data));
             Fluttertoast.showToast(msg: "Categoria do usuário atualizada");
           } else {
             Fluttertoast.showToast(msg: "Erro ao salvar categoria do usuário");

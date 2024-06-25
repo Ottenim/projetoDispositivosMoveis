@@ -160,6 +160,7 @@ class HomeButtons extends StatelessWidget {
             icon: 'assets/icons/location.svg',
             onTap: () => Navigator.of(context).push(LocationPage.route()),
           ),
+          12.toSizedBoxH(),
           HomeCard(
             title: "Cadastro de profissionais",
             icon: 'assets/icons/professional.svg',

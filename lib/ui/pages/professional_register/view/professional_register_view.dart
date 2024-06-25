@@ -32,7 +32,12 @@ class ProfessionalCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseCard(
-        onTap: () {},
+        onTap: () => context.read<ProfessionalRegisterBloc>().add(
+            UserCategoryChanged(
+                user,
+                user.userCategory == UserCategory.client
+                    ? UserCategory.barber
+                    : UserCategory.client)),
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
           children: [
@@ -49,11 +54,7 @@ class ProfessionalCard extends StatelessWidget {
                     Checkbox(
                       checkColor: const Color(0xffFFF112),
                       value: user.userCategory == UserCategory.barber,
-                      onChanged: (bool? value) async {
-                        context
-                            .read<ProfessionalRegisterBloc>()
-                            .add(UserCategoryChanged(user, user.userCategory!));
-                      },
+                      onChanged: (bool? value) {},
                     ),
                   ],
                 ),

@@ -30,7 +30,7 @@ class User extends Equatable {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {};
     map['name'] = name;
-    map['userCategory'] = userCategory?.index ?? 0;
+    map['userCategory'] = userCategory?.index ?? 2;
     map['cpf'] = cpf;
     map['password'] = password;
     return map;
