@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 const String SCHEDULES_COLLECTION = "schedules";
 
 class ScheduleService {
-
   final _firestore = FirebaseFirestore.instance;
 
   late final CollectionReference<Scheduling> _scheduleCollection;
@@ -21,7 +20,6 @@ class ScheduleService {
     return (await _scheduleCollection.add(schedule)).id;
   }
 
-
   //READ
   Future<Scheduling?> getScheduleById(String id) async {
     final scheduleStream = await _scheduleCollection.where('id', isEqualTo: id).get();
@@ -36,10 +34,7 @@ class ScheduleService {
   }
 
   Future<List<Scheduling>> getSchedulesByClientId(String clientId) async {
-    final scheduleStream = await _scheduleCollection.where('clientId', isEqualTo: clientId)
-                                                    .where('day', isGreaterThanOrEqualTo: Timestamp.now())
-                                                    .orderBy('day', descending: true)
-                                                    .get();
+    final scheduleStream = await _scheduleCollection.where('clientId', isEqualTo: clientId).get();
 
     List<Scheduling> schedules = [];
 

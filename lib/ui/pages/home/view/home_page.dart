@@ -1,5 +1,6 @@
 import 'package:barber/infra/extensions/integer.dart';
 import 'package:barber/main.dart';
+import 'package:barber/models/models.dart';
 import 'package:barber/repositories/repositories.dart';
 import 'package:barber/ui/pages/home/bloc/home_bloc.dart';
 import 'package:barber/ui/pages/location/view/location_page.dart';
@@ -7,6 +8,7 @@ import 'package:barber/ui/pages/login/login.dart';
 import 'package:barber/ui/pages/professional_register/view/professional_register_page.dart';
 import 'package:barber/ui/pages/profile/view/view.dart';
 import 'package:barber/ui/pages/schedule/view/schedule_page.dart';
+import 'package:barber/ui/pages/schedule_list/schedule_list.dart';
 import 'package:barber/ui/pages/services/view/service_page.dart';
 import 'package:barber/ui/widgets/base_card.dart';
 import 'package:barber/utils/utils.dart';
@@ -15,8 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatelessWidget {
-  static Route route() =>
-      MaterialPageRoute(builder: (context) => const HomePage());
+  static Route route() => MaterialPageRoute(builder: (context) => const HomePage());
 
   const HomePage({super.key});
 
@@ -119,6 +120,8 @@ class HomeButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User activeUser = context.read<UserRepository>().user;
+
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Column(
@@ -134,15 +137,19 @@ class HomeButtons extends StatelessWidget {
           HomeCard(
             title: "Meus agendamentos",
             icon: 'assets/icons/clipboard_check.svg',
-            onTap: () {},
+            onTap: () => Navigator.of(context).push(ScheduleListPage.route()),
           ),
           12.toSizedBoxH(),
-          HomeCard(
-            title: "Serviços",
-            icon: 'assets/icons/scissors.svg',
-            onTap: () => Navigator.of(context).push(ServicePage.route()),
-          ),
-          12.toSizedBoxH(),
+          ...activeUser.userCategory == UserCategory.admin
+              ? [
+                  HomeCard(
+                    title: "Serviços",
+                    icon: 'assets/icons/scissors.svg',
+                    onTap: () => Navigator.of(context).push(ServicePage.route()),
+                  ),
+                  12.toSizedBoxH()
+                ]
+              : [],
           HomeCard(
             title: "Histórico",
             icon: 'assets/icons/history.svg',
@@ -161,12 +168,15 @@ class HomeButtons extends StatelessWidget {
             onTap: () => Navigator.of(context).push(LocationPage.route()),
           ),
           12.toSizedBoxH(),
-          HomeCard(
-            title: "Cadastro de profissionais",
-            icon: 'assets/icons/professional.svg',
-            onTap: () =>
-                Navigator.of(context).push(ProfessionalRegisterPage.route()),
-          )
+          ...activeUser.userCategory == UserCategory.admin
+              ? [
+                  HomeCard(
+                    title: "Cadastro de profissionais",
+                    icon: 'assets/icons/professional.svg',
+                    onTap: () => Navigator.of(context).push(ProfessionalRegisterPage.route()),
+                  )
+                ]
+              : []
         ],
       ),
     );
@@ -187,8 +197,7 @@ class HomeCard extends StatelessWidget {
       child: ListTile(
         leading: Container(
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-              color: Color(0xffFFF112), borderRadius: BorderRadius.circular(6)),
+          decoration: BoxDecoration(color: Color(0xffFFF112), borderRadius: BorderRadius.circular(6)),
           child: SvgPicture.asset(
             icon ?? '',
             width: 24,
