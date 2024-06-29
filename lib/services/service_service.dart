@@ -9,10 +9,12 @@ class ServiceService {
   late final CollectionReference<Service> _serviceCollection;
 
   ServiceService() {
-    _serviceCollection = _firestore.collection(SERVICES_COLLECTION).withConverter<Service>(
-          fromFirestore: (snapshot, options) => Service.fromMap(snapshot.id, snapshot.data() ?? {}),
-          toFirestore: (value, options) => value.toMap(),
-        );
+    _serviceCollection =
+        _firestore.collection(SERVICES_COLLECTION).withConverter<Service>(
+              fromFirestore: (snapshot, options) =>
+                  Service.fromMap(snapshot.id, snapshot.data() ?? {}),
+              toFirestore: (value, options) => value.toMap(),
+            );
   }
 
   //CREATE
@@ -22,7 +24,8 @@ class ServiceService {
 
   //READ
   Future<List<Service>> getServices() async {
-    final serviceStream = await _serviceCollection.orderBy('name', descending: false).get();
+    final serviceStream =
+        await _serviceCollection.orderBy('name', descending: false).get();
 
     List<Service> services = [];
 
@@ -33,9 +36,16 @@ class ServiceService {
     return services;
   }
 
+  Future<Service?> getServiceById(String id) async {
+    final serviceStream = await _serviceCollection.doc(id).get();
+    return serviceStream.data();
+  }
+
   //UPDATE
-  Future<void> update(String id, Service service) async => await _serviceCollection.doc(id).update(service.toMap());
+  Future<void> update(String id, Service service) async =>
+      await _serviceCollection.doc(id).update(service.toMap());
 
   //DELETE
-  Future<void> delete(String id) async => await _serviceCollection.doc(id).delete();
+  Future<void> delete(String id) async =>
+      await _serviceCollection.doc(id).delete();
 }

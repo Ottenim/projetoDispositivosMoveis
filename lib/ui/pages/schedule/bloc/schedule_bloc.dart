@@ -7,13 +7,11 @@ import 'package:barber/services/service_service.dart';
 import 'package:barber/services/services.dart';
 import 'package:barber/utils/utils.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 part 'schedule_event.dart';
-
 part 'schedule_state.dart';
 
 class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
@@ -41,11 +39,15 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     emit(state.copyWith(state: PageState.loading()));
 
     try {
-      List<User> users = await userService.getUsersByCategory();
+      List<User> users = await userService.getUsersByCategory([1, 2]);
       List<String> hours = _buildAvailableHours();
       List<Service> services = await serviceService.getServices();
 
-      emit(state.copyWith(state: PageState.none(), professionals: users, availableHours: hours, services: services));
+      emit(state.copyWith(
+          state: PageState.none(),
+          professionals: users,
+          availableHours: hours,
+          services: services));
     } catch (e) {
       emit(state.copyWith(state: PageState.error()));
     }
@@ -84,7 +86,8 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
     List<String> hours = [];
 
-    DateTime startTime = DateTime.now().copyWith(hour: 8, minute: 0, millisecond: 0, microsecond: 0);
+    DateTime startTime = DateTime.now()
+        .copyWith(hour: 8, minute: 0, millisecond: 0, microsecond: 0);
     int startHour = startTime.hour;
 
     while (startHour <= 18) {
@@ -106,7 +109,8 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       emit(state.copyWith(saveState: PageState.loading('Agendando horário')));
 
       try {
-        DateTime? dateTime = DateFormat(DateFormat.HOUR24_MINUTE).parse(state.selectedHour ?? '');
+        DateTime? dateTime = DateFormat(DateFormat.HOUR24_MINUTE)
+            .parse(state.selectedHour ?? '');
 
         await scheduleService.addSchedule(
           Scheduling(
@@ -117,12 +121,14 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
               clientId: userRepository.user.id),
         );
 
-        emit(state.copyWith(saveState: PageState.success(info: 'Corte Agendado')));
+        emit(state.copyWith(
+            saveState: PageState.success(info: 'Corte Agendado')));
       } catch (e) {
-        emit(state.copyWith(saveState: PageState.error('Erro ao salvar horário')));
+        emit(state.copyWith(
+            saveState: PageState.error('Erro ao salvar horário')));
       }
     } else {
-      emit(state.copyWith(saveState: PageState.error('Ah campos não válidos')));
+      emit(state.copyWith(saveState: PageState.error('Há campos não válidos')));
     }
   }
 }

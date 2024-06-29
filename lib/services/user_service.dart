@@ -4,11 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 const String USERS_COLLECTION = "users";
 
 class UserService {
-  ///Temos que ter um Crud para cada model, ou seja:
-  ///Usuario -> Create, Read, Update, Deletereate, Read, Update, Delete
-  ///Barbearia -> C
-  ///Agendamento -> Create, Read, Update, Delete
-
   final _firestore = FirebaseFirestore.instance;
 
   late final CollectionReference<User> _userCollection;
@@ -53,11 +48,13 @@ class UserService {
     return users;
   }
 
-  Future<List<User>> getUsersByCategory() async {
-    final userStream = await _userCollection
-        .where(Filter.or(Filter('userCategory', isEqualTo: 1),
-            Filter('userCategory', isEqualTo: 2)))
-        .get();
+  Future<List<User>> getUsersByCategory(List<int> categories) async {
+    if (categories.isEmpty) {
+      return [];
+    }
+
+    final userStream =
+        await _userCollection.where('userCategory', whereIn: categories).get();
 
     List<User> users = [];
 

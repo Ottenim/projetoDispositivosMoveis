@@ -38,15 +38,15 @@ class ProfessionalCard extends StatelessWidget {
                 user.userCategory == UserCategory.client
                     ? UserCategory.barber
                     : UserCategory.client)),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         child: Row(
           children: [
             Expanded(
               child: Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.only(left: 25),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Color(0xffFFF112)),
+                  borderRadius: BorderRadius.circular(6),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
