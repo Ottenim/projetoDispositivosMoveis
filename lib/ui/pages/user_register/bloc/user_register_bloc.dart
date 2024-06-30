@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'user_register_event.dart';
-
 part 'user_register_state.dart';
 
 class UserRegisterBloc extends Bloc<UserRegisterEvent, UserRegisterState> {
@@ -55,11 +54,13 @@ class UserRegisterBloc extends Bloc<UserRegisterEvent, UserRegisterState> {
         User? exists = await userService.getUserByCpf(state.cpf);
 
         if (exists == null) {
-          User user = User(name: state.name, cpf: state.cpf, password: state.password);
+          User user =
+              User(name: state.name, cpf: state.cpf, password: state.password);
 
           user = user.copyWith(id: await userService.addUser(user));
 
-          emit(state.copyWith(state: PageState.success(info: 'Usuário criado', data: user)));
+          emit(state.copyWith(
+              state: PageState.success(info: 'Usuário criado', data: user)));
         } else {
           emit(state.copyWith(state: PageState.error('Usuário existente')));
         }

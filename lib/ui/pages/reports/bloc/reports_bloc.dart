@@ -43,27 +43,63 @@ class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
   ) async {
     emit(state.copyWith(state: PageState.loading()));
     try {
-      List<User> users = await userService.getUsersByCategory([1]);
+      List<User> usersProfessionals = await userService.getUsersByCategory([1]);
+      List<User> usersClients = await userService.getUsersByCategory([2]);
+
+      List<Service>? services = await serviceService.getServices();
 
       List<Report> reports = [];
 
-      for (var user in users) {
+      /*for (var user in usersClients) {
         List<Scheduling> schedules =
             await scheduleService.getSchedulesByClientId(user.id!);
         double totalValue = 0;
         int totalDuration = 0;
 
         for (var schedule in schedules) {
-          Service? service =
-              await serviceService.getServiceById(schedule.serviceId!);
-          if (service != null) {
-            totalValue += service.value!;
-            totalDuration += service.duration!;
-          }
+          services.map((service) {
+            if (service.id == schedule.serviceId) {
+              totalValue += service.value!;
+              totalDuration += service.duration!;
+            }
+          });
         }
         reports.add(Report(
           userName: user.name,
           userCpf: user.cpf,
+          totalValue: totalValue,
+          totalDuration: totalDuration,
+        ));
+      }*/
+      for (var professional in usersProfessionals) {
+        double totalValue = 0;
+        int totalDuration = 0;
+
+        // Iterar sobre cada cliente
+        for (var client in usersClients) {
+          // Obter os agendamentos do cliente
+          List<Scheduling> schedules =
+              await scheduleService.getSchedulesByClientId(client.id!);
+
+          // Iterar sobre cada agendamento do cliente
+          for (var schedule in schedules) {
+            // Verificar se o agendamento foi atendido pelo profissional atual
+            if (schedule.attendantId == professional.id) {
+              // Encontrar o serviço correspondente ao agendamento
+              var service =
+                  services.firstWhere((s) => s.id == schedule.serviceId);
+
+              // Somar o valor e a duração do serviço ao total do profissional
+              totalValue += service.value!;
+              totalDuration += service.duration!;
+            }
+          }
+        }
+
+        // Adicionar o relatório do profissional à lista de relatórios
+        reports.add(Report(
+          userName: professional.name,
+          userCpf: professional.cpf,
           totalValue: totalValue,
           totalDuration: totalDuration,
         ));

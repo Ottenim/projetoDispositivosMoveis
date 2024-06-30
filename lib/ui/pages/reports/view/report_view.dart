@@ -22,22 +22,60 @@ class ReportView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 _addTitleDates(),
-                40.toSizedBoxH(),
+                10.toSizedBoxH(),
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const DateSelector(true),
+                    Expanded(
+                      child: BaseDatePicker(
+                        hint: '00/00/0000',
+                        validator: (value) => value == null
+                            ? 'Campo Obrigatório'
+                            : value.isAfter(DateTime.now().copyWith(
+                                    second: 0,
+                                    microsecond: 0,
+                                    millisecond: 0,
+                                    minute: 0,
+                                    hour: 0))
+                                ? 'A data deve ser anterior à data atual'
+                                : null,
+                        onChanged: (value) => context
+                            .read<ReportsBloc>()
+                            .add(OnInitialDateChanged(value!)),
+                      ),
+                    ),
                     10.toSizedBoxW(),
-                    const DateSelector(false),
+                    Expanded(
+                      child: BaseDatePicker(
+                        hint: '00/00/0000',
+                        validator: (value) => value == null
+                            ? 'Campo Obrigatório'
+                            : value.isAfter(DateTime.now().copyWith(
+                                    second: 0,
+                                    microsecond: 0,
+                                    millisecond: 0,
+                                    minute: 0,
+                                    hour: 0))
+                                ? 'A data deve ser anterior à data atual'
+                                : null,
+                        onChanged: (value) => context.read<ReportsBloc>().add(
+                              OnFinalDateChanged(value!),
+                            ),
+                      ),
+                    ),
                   ],
                 ),
                 20.toSizedBoxH(),
-                BaseList(
-                  items: state.reports,
-                  state: state.state,
-                  onRefresh: () =>
-                      context.read<ReportsBloc>().add(OnBtnClick()),
-                  itemBuilder: (context, item) => ProfessionalReportCard(item),
+                Expanded(
+                  child: BaseList(
+                    items: state.reports,
+                    state: state.state,
+                    onRefresh: () =>
+                        context.read<ReportsBloc>().add(OnBtnClick()),
+                    itemBuilder: (context, item) =>
+                        ProfessionalReportCard(item),
+                  ),
                 ),
                 FloatingActionButton.small(
                   onPressed: () =>
@@ -128,7 +166,8 @@ class ProfessionalReportCard extends StatelessWidget {
                     children: [
                       Text("Nome: ${report.userName}"),
                       Text("CPF: ${report.userCpf}"),
-                      Text("Tempo de trabalho: ${report.totalDuration}"),
+                      Text(
+                          "Tempo de trabalho: ${report.totalDuration} minutos"),
                       Text("Total recebido: R\$ ${report.totalValue}")
                     ],
                   ),
@@ -136,38 +175,6 @@ class ProfessionalReportCard extends StatelessWidget {
               ),
             ],
           )),
-    );
-  }
-}
-
-class DateSelector extends StatelessWidget {
-  final bool isInitialDate;
-
-  const DateSelector(this.isInitialDate, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 150,
-      height: 25,
-      child: BaseDatePicker(
-        hint: '00/00/0000',
-        validator: (value) => value == null
-            ? 'Campo Obrigatório'
-            : value.isAfter(DateTime.now().copyWith(
-                    second: 0,
-                    microsecond: 0,
-                    millisecond: 0,
-                    minute: 0,
-                    hour: 0))
-                ? 'A data deve ser anterior à data atual'
-                : null,
-        onChanged: (value) => context.read<ReportsBloc>().add(
-              isInitialDate
-                  ? OnInitialDateChanged(value!)
-                  : OnFinalDateChanged(value!),
-            ),
-      ),
     );
   }
 }
