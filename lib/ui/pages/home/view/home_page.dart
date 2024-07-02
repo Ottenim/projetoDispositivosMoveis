@@ -18,8 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatelessWidget {
-  static Route route() =>
-      MaterialPageRoute(builder: (context) => const HomePage());
+  static Route route() => MaterialPageRoute(builder: (context) => const HomePage());
 
   const HomePage({super.key});
 
@@ -147,18 +146,11 @@ class HomeButtons extends StatelessWidget {
                   HomeCard(
                     title: "Serviços",
                     icon: 'assets/icons/scissors.svg',
-                    onTap: () =>
-                        Navigator.of(context).push(ServicePage.route()),
+                    onTap: () => Navigator.of(context).push(ServicePage.route()),
                   ),
                   12.toSizedBoxH()
                 ]
               : [],
-          HomeCard(
-            title: "Histórico",
-            icon: 'assets/icons/history.svg',
-            onTap: () {},
-          ),
-          12.toSizedBoxH(),
           HomeCard(
             title: "Meu perfil",
             icon: 'assets/icons/user.svg',
@@ -176,8 +168,7 @@ class HomeButtons extends StatelessWidget {
                   HomeCard(
                     title: "Cadastro de profissionais",
                     icon: 'assets/icons/professional.svg',
-                    onTap: () => Navigator.of(context)
-                        .push(ProfessionalRegisterPage.route()),
+                    onTap: () => Navigator.of(context).push(ProfessionalRegisterPage.route()),
                   )
                 ]
               : [],
@@ -207,8 +198,7 @@ class HomeCard extends StatelessWidget {
       child: ListTile(
         leading: Container(
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-              color: Color(0xffFFF112), borderRadius: BorderRadius.circular(6)),
+          decoration: BoxDecoration(color: Color(0xffFFF112), borderRadius: BorderRadius.circular(6)),
           child: SvgPicture.asset(
             icon ?? '',
             width: 24,
