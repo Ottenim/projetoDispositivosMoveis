@@ -9,17 +9,27 @@ class UserService {
   late final CollectionReference<User> _userCollection;
 
   UserService() {
-    _userCollection =
-        _firestore.collection(USERS_COLLECTION).withConverter<User>(
-              fromFirestore: (snapshot, options) =>
-                  User.fromMap(snapshot.id, snapshot.data() ?? {}),
-              toFirestore: (value, options) => value.toMap(),
-            );
+    _userCollection = _firestore.collection(USERS_COLLECTION).withConverter<User>(
+          fromFirestore: (snapshot, options) => User.fromMap(snapshot.id, snapshot.data() ?? {}),
+          toFirestore: (value, options) => value.toMap(),
+        );
   }
 
   //CREATE
   Future<String> addUser(User user) async {
     return (await _userCollection.add(user)).id;
+  }
+
+  Future<User?> getUserById(String id) async {
+    final userStream = await _userCollection.where('id', isEqualTo: id).get();
+
+    User? user;
+
+    if (userStream.docs.isNotEmpty) {
+      user = userStream.docs.first.data();
+    }
+
+    return user;
   }
 
   Future<User?> getUserByCpf(String cpf) async {
@@ -36,8 +46,7 @@ class UserService {
 
   //READ
   Future<List<User>> getUsers() async {
-    final userStream =
-        await _userCollection.orderBy('name', descending: false).get();
+    final userStream = await _userCollection.orderBy('name', descending: false).get();
 
     List<User> users = [];
 
@@ -53,8 +62,7 @@ class UserService {
       return [];
     }
 
-    final userStream =
-        await _userCollection.where('userCategory', whereIn: categories).get();
+    final userStream = await _userCollection.where('userCategory', whereIn: categories).get();
 
     List<User> users = [];
 
@@ -66,10 +74,8 @@ class UserService {
   }
 
   //UPDATE
-  Future<void> updateUser(String id, User user) async =>
-      await _userCollection.doc(id).update(user.toMap());
+  Future<void> updateUser(String id, User user) async => await _userCollection.doc(id).update(user.toMap());
 
   //DELETE
-  Future<void> deleteUser(String id) async =>
-      await _userCollection.doc(id).delete();
+  Future<void> deleteUser(String id) async => await _userCollection.doc(id).delete();
 }

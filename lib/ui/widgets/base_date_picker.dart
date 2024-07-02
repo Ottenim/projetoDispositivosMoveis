@@ -3,7 +3,7 @@ import 'package:barber/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class BaseDatePicker extends StatelessWidget {
+class BaseDatePicker extends StatefulWidget {
   const BaseDatePicker({
     Key? key,
     this.hint,
@@ -18,20 +18,32 @@ class BaseDatePicker extends StatelessWidget {
   final FormFieldValidator<DateTime>? validator;
 
   @override
+  State<BaseDatePicker> createState() => _BaseDatePickerState();
+}
+
+class _BaseDatePickerState extends State<BaseDatePicker> {
+  TextEditingController controller = TextEditingController();
+
+  DateTime? selectedValue;
+
+  @override
+  void initState() {
+    super.initState();
+
+    selectedValue = widget.initialValue;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    TextEditingController controller = TextEditingController();
-
-    DateTime? selectedValue = initialValue;
-
     return BaseTextField(
-      hint: hint,
+      hint: widget.hint,
       prefixIcon: SvgPicture.asset(
         'assets/icons/calendar.svg',
         colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
       ),
       controller: controller,
       readOnly: true,
-      validator: (value) => validator?.call(selectedValue),
+      validator: (value) => widget.validator?.call(selectedValue),
       onTap: () async {
         DateTime? picked = await showDatePicker(
           context: context,
@@ -48,7 +60,7 @@ class BaseDatePicker extends StatelessWidget {
 
         selectedValue = picked;
 
-        onChanged?.call(selectedValue);
+        widget.onChanged?.call(selectedValue);
       },
     );
   }

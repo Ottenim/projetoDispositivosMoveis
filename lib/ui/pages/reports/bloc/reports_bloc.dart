@@ -6,10 +6,13 @@ import 'package:barber/services/schedule_service.dart';
 import 'package:barber/services/service_service.dart';
 import 'package:barber/services/services.dart';
 import 'package:barber/utils/page_state.dart';
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:collection/collection.dart';
 
 part 'reports_event.dart';
+
 part 'reports_state.dart';
 
 class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
@@ -19,6 +22,7 @@ class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
     on<OnBtnClick>(_onBtnClick);
   }
 
+  final GlobalKey<FormState> formKey = GlobalKey();
   final UserService userService = UserService();
   final ServiceService serviceService = ServiceService();
   final ScheduleService scheduleService = ScheduleService();
@@ -41,73 +45,63 @@ class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
     OnBtnClick event,
     Emitter<ReportsState> emit,
   ) async {
-    emit(state.copyWith(state: PageState.loading()));
-    try {
-      List<User> usersProfessionals = await userService.getUsersByCategory([1]);
-      List<User> usersClients = await userService.getUsersByCategory([2]);
+    if (formKey.currentState?.validate() ?? false) {
+      emit(state.copyWith(state: PageState.loading()));
+      try {
+        List<Scheduling> schedules = await scheduleService.getSchedules(state.initialDate, state.finalDate);
+        List<User> professionals = await userService.getUsersByCategory([UserCategory.barber.index]);
 
-      List<Service>? services = await serviceService.getServices();
+        Map<String, User> professionalsCache = {};
+        Map<String, int> timeWorking = {};
+        Map<String, double> professionalValues = {};
+        Map<String, Service> servicesCache = {};
 
-      List<Report> reports = [];
+        for (Scheduling scheduling in schedules) {
+          Service? service;
 
-      /*for (var user in usersClients) {
-        List<Scheduling> schedules =
-            await scheduleService.getSchedulesByClientId(user.id!);
-        double totalValue = 0;
-        int totalDuration = 0;
+          if (!servicesCache.containsKey(scheduling.serviceId)) {
+            service = await serviceService.getServiceById(scheduling.serviceId ?? '');
 
-        for (var schedule in schedules) {
-          services.map((service) {
-            if (service.id == schedule.serviceId) {
-              totalValue += service.value!;
-              totalDuration += service.duration!;
+            if (service != null) {
+              servicesCache.putIfAbsent(service.id ?? '', () => service!);
             }
-          });
-        }
-        reports.add(Report(
-          userName: user.name,
-          userCpf: user.cpf,
-          totalValue: totalValue,
-          totalDuration: totalDuration,
-        ));
-      }*/
-      for (var professional in usersProfessionals) {
-        double totalValue = 0;
-        int totalDuration = 0;
-
-        // Iterar sobre cada cliente
-        for (var client in usersClients) {
-          // Obter os agendamentos do cliente
-          List<Scheduling> schedules =
-              await scheduleService.getSchedulesByClientId(client.id!);
-
-          // Iterar sobre cada agendamento do cliente
-          for (var schedule in schedules) {
-            // Verificar se o agendamento foi atendido pelo profissional atual
-            if (schedule.attendantId == professional.id) {
-              // Encontrar o serviço correspondente ao agendamento
-              var service =
-                  services.firstWhere((s) => s.id == schedule.serviceId);
-
-              // Somar o valor e a duração do serviço ao total do profissional
-              totalValue += service.value!;
-              totalDuration += service.duration!;
-            }
+          } else {
+            service = servicesCache[scheduling.serviceId];
           }
+
+          User? professional;
+
+          if (!professionalsCache.containsKey(scheduling.attendantId)) {
+            professional = professionals.firstWhereOrNull((element) => element.id == scheduling.attendantId);
+
+            if (professional != null) {
+              professionalsCache.putIfAbsent(professional.id ?? '', () => professional!);
+            }
+          } else {
+            professional = professionalsCache[scheduling.attendantId];
+          }
+
+          timeWorking.update(scheduling.attendantId ?? '', (value) => (service?.duration ?? 0) + value, ifAbsent: () => service?.duration ?? 0);
+          professionalValues.update(scheduling.attendantId ?? '', (value) => (service?.value ?? 0) + value, ifAbsent: () => service?.value ?? 0);
         }
 
-        // Adicionar o relatório do profissional à lista de relatórios
-        reports.add(Report(
-          userName: professional.name,
-          userCpf: professional.cpf,
-          totalValue: totalValue,
-          totalDuration: totalDuration,
-        ));
-      }
+        List<Report> reports = [];
 
-      emit(state.copyWith(state: PageState.success(), reports: reports));
-    } catch (e) {
-      emit(state.copyWith(state: PageState.error()));
+        for (MapEntry<String, User> entry in professionalsCache.entries) {
+          reports.add(Report(
+            userName: entry.value.name,
+            userCpf: entry.value.cpf,
+            totalValue: professionalValues[entry.key],
+            totalDuration: timeWorking[entry.key],
+          ));
+        }
+
+        emit(state.copyWith(state: PageState.success(), reports: reports));
+      } catch (e) {
+        emit(state.copyWith(state: PageState.error()));
+      }
+    } else {
+      emit(state.copyWith(state: PageState.error('Campos obrigatórios não preenchidos')));
     }
   }
 }

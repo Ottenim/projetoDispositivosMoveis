@@ -1,5 +1,6 @@
 import 'package:barber/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 const String SCHEDULES_COLLECTION = "schedules";
 
@@ -35,6 +36,22 @@ class ScheduleService {
 
   Future<List<Scheduling>> getSchedulesByClientId(String clientId) async {
     final scheduleStream = await _scheduleCollection.where('clientId', isEqualTo: clientId).get();
+
+    List<Scheduling> schedules = [];
+
+    for (var element in scheduleStream.docs) {
+      schedules.add(element.data());
+    }
+
+    return schedules;
+  }
+
+  Future<List<Scheduling>> getSchedules(DateTime startDate, DateTime endDate) async {
+    DateFormat formatter = DateFormat('yyyy-MM-dd');
+
+    final scheduleStream = await _scheduleCollection
+        .where('day', isGreaterThanOrEqualTo: formatter.format(startDate), isLessThanOrEqualTo: formatter.format(endDate))
+        .get();
 
     List<Scheduling> schedules = [];
 
