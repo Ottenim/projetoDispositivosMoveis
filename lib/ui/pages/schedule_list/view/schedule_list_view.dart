@@ -14,25 +14,30 @@ class ScheduleListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ScheduleListBloc, ScheduleListState>(
       buildWhen: (previous, current) => previous.state != current.state,
-      builder: (context, state) => Expanded(
-        child: BaseList(
-          state: state.state,
-          items: state.schedules,
-          onRefresh: () =>
-              context.read<ScheduleListBloc>().add(ScheduleListFetch()),
-          itemBuilder: (context, item) => AgendamentoWidget(
-            date: item.day != null
-                ? DateFormat(DateFormat.YEAR_MONTH_DAY).format(item.day!)
-                : '',
-            service:
-                state.services.firstWhere((e) => e.id == item.serviceId).name!,
-            attendant: state.professionals
-                    .where((e) => e.id == item.attendantId)
-                    .firstOrNull
-                    ?.name ??
-                "Não é mais um atendente",
+      builder: (context, state) => Column(
+        children: [
+          Expanded(
+            child: BaseList(
+              state: state.state,
+              items: state.schedules,
+              onRefresh: () =>
+                  context.read<ScheduleListBloc>().add(ScheduleListFetch()),
+              itemBuilder: (context, item) => AgendamentoWidget(
+                date: item.day != null
+                    ? DateFormat(DateFormat.YEAR_MONTH_DAY).format(item.day!)
+                    : '',
+                service: state.services
+                    .firstWhere((e) => e.id == item.serviceId)
+                    .name!,
+                attendant: state.professionals
+                        .where((e) => e.id == item.attendantId)
+                        .firstOrNull
+                        ?.name ??
+                    "Não é mais um atendente",
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

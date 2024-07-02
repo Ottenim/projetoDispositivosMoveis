@@ -30,7 +30,7 @@ class LocationPage extends StatelessWidget {
             position: _establishmentLocation,
             infoWindow: const InfoWindow(
               title: 'Barbearia',
-              snippet: 'Aqui é a barbearia do Janei.',
+              snippet: 'Aqui é a barbearia.',
             ),
           ),
         },
