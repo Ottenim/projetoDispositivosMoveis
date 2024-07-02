@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:io';
 import 'package:barber/models/models.dart';
 import 'package:barber/repositories/repositories.dart';
 import 'package:barber/services/services.dart';
@@ -7,10 +7,10 @@ import 'package:barber/ui/pages/authentication/authentication_bloc.dart';
 import 'package:barber/utils/utils.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 part 'profile_event.dart';
-
 part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
@@ -18,6 +18,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileNameChanged>(_onNameChanged);
     on<ProfileCpfChanged>(_onCpfChanged);
     on<ProfilePasswordChanged>(_onPasswordChanged);
+    on<ProfileImageChanged>(_onImageChanged);
     on<ProfileSaveChanges>(_onSaveChanges);
     on<ProfileDeleteAccount>(_onDeleteAccount);
   }
@@ -49,6 +50,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(state.copyWith(newPassword: event.password));
   }
 
+  FutureOr<void> _onImageChanged(
+    ProfileImageChanged event,
+    Emitter<ProfileState> emit,
+  ) {
+    emit(state.copyWith(imagePath: event.imagePath));
+  }
+
   FutureOr<void> _onSaveChanges(
     ProfileSaveChanges event,
     Emitter<ProfileState> emit,
@@ -58,19 +66,33 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       User user = userRepository.user;
 
+      String? imageUrl = '';
+      if (state.imagePath.isNotEmpty) {
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('profile_images')
+            .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
+
+        final uploadTask = storageRef.putFile(File(state.imagePath!));
+        final snapshot = await uploadTask.whenComplete(() => null);
+        imageUrl = await snapshot.ref.getDownloadURL();
+      }
+
       await userService.updateUser(
-          user.id ?? '',
-          user = user.copyWith(
-            name: state.name.isNotEmpty ? state.name : null,
-            cpf: state.cpf.isNotEmpty ? state.cpf : null,
-            password: state.newPassword.isNotEmpty ? state.newPassword : null,
-          ));
+        user.id ?? '',
+        user = user.copyWith(
+          name: state.name.isNotEmpty ? state.name : null,
+          cpf: state.cpf.isNotEmpty ? state.cpf : null,
+          password: state.newPassword.isNotEmpty ? state.newPassword : null,
+          imageUrl: imageUrl,
+        ),
+      );
 
       await userRepository.setUser(user.id ?? '', user.toMap());
 
       emit(state.copyWith(state: PageState.success(info: 'Usuário atualizado', data: user)));
     } catch (e) {
-      emit(state.copyWith(state: PageState.error('Erro ao salvar usuário')));
+      emit(state.copyWith(state: PageState.error('Erro ao salvar usuário: $e')));
     }
   }
 

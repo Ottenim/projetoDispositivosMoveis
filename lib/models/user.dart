@@ -8,6 +8,7 @@ class User extends Equatable {
   final UserCategory? userCategory;
   final String? cpf;
   final String? password;
+  final String? imageUrl;
 
   //fotoPerfil
 
@@ -17,6 +18,7 @@ class User extends Equatable {
     this.userCategory,
     this.cpf,
     this.password,
+    this.imageUrl,
   });
 
   factory User.fromMap(String id, Map<String, dynamic> map) => User(
@@ -25,6 +27,7 @@ class User extends Equatable {
         userCategory: UserCategory.values[map['userCategory']],
         cpf: map['cpf'],
         password: map['password'],
+        imageUrl: map['imageUrl'],
       );
 
   Map<String, dynamic> toMap() {
@@ -33,6 +36,7 @@ class User extends Equatable {
     map['userCategory'] = userCategory?.index ?? 2;
     map['cpf'] = cpf;
     map['password'] = password;
+    map['imageUrl'] = imageUrl;
     return map;
   }
 
@@ -42,6 +46,7 @@ class User extends Equatable {
     UserCategory? userCategory,
     String? cpf,
     String? password,
+    String? imageUrl,
   }) {
     return User(
       id: id ?? this.id,
@@ -49,6 +54,7 @@ class User extends Equatable {
       userCategory: userCategory ?? this.userCategory,
       cpf: cpf ?? this.cpf,
       password: password ?? this.password,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 

@@ -1,12 +1,12 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Photo extends StatefulWidget {
-  static Route route() => MaterialPageRoute(builder: (context) => Photo());
+  final void Function(XFile?) onImageSelected;
+  final String? initialImage;
 
-  const Photo({super.key});
+  const Photo({Key? key, required this.onImageSelected, this.initialImage}) : super(key: key);
 
   @override
   State<Photo> createState() => _PageState();
@@ -17,12 +17,21 @@ class _PageState extends State<Photo> {
   dynamic _pickImageError;
   final ImagePicker _picker = ImagePicker();
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialImage != null && widget.initialImage!.isNotEmpty) {
+      _imageFile = XFile(widget.initialImage!);
+    }
+  }
+
   Future<void> _onImageButtonPressed(ImageSource source) async {
     try {
       final XFile? pickedFile = await _picker.pickImage(source: source);
       setState(() {
         _imageFile = pickedFile;
       });
+      widget.onImageSelected(pickedFile);
     } catch (e) {
       setState(() {
         _pickImageError = e;
@@ -31,17 +40,25 @@ class _PageState extends State<Photo> {
   }
 
   ImageProvider<Object>? _previewImage() {
+  try {
     if (_imageFile != null) {
-      return FileImage(File(_imageFile!.path));
+      if (_imageFile!.path.startsWith('https:')) {
+        return NetworkImage(_imageFile!.path);
+      } else {
+        return FileImage(File(_imageFile!.path));
+      }
     }
-    return null;
+  } catch (e) {
+    print('Error loading image: $e');
   }
+  return null;
+}
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.only(left: 25, right: 25, top: 8, bottom: 8),
+        padding: const EdgeInsets.only(left: 25, right: 25, top: 8, bottom: 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -152,6 +169,7 @@ class _PageState extends State<Photo> {
                   setState(() {
                     _imageFile = null;
                   });
+                  widget.onImageSelected(null);
                 },
               ),
             ],

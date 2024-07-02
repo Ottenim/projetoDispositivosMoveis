@@ -25,6 +25,12 @@ class ProfilePasswordChanged extends ProfileEvent {
   final String password;
 }
 
+class ProfileImageChanged extends ProfileEvent {
+  const ProfileImageChanged(this.imagePath);
+
+  final String imagePath;
+}
+
 class ProfileSaveChanges extends ProfileEvent {}
 
 class ProfileDeleteAccount extends ProfileEvent {}
