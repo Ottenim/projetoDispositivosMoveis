@@ -151,7 +151,6 @@ class HomeButtons extends StatelessWidget {
                   12.toSizedBoxH()
                 ]
               : [],
-          12.toSizedBoxH(),
           HomeCard(
             title: "Meu perfil",
             icon: 'assets/icons/user.svg',
