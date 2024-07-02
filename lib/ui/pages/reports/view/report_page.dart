@@ -7,8 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ReportPage extends StatelessWidget {
-  static Route route() =>
-      MaterialPageRoute(builder: (context) => const ReportPage());
+  static Route route() => MaterialPageRoute(builder: (context) => const ReportPage());
 
   const ReportPage({super.key});
 
@@ -21,6 +20,8 @@ class ReportPage extends StatelessWidget {
         listener: (context, state) async {
           if (state.state.status == PageStatus.success) {
             Fluttertoast.showToast(msg: "Gerando relatório");
+          } else if (state.state.status == PageStatus.error) {
+            Fluttertoast.showToast(msg: state.state.info ?? '');
           }
         },
         child: Scaffold(

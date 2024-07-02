@@ -12,82 +12,80 @@ class ReportView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ReportsBloc, ReportsState>(
-        buildWhen: (previous, current) => previous.state != current.state,
-        builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.end,
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          _addTitleDates(),
+          10.toSizedBoxH(),
+          Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            key: context.read<ReportsBloc>().formKey,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _addTitleDates(),
-                10.toSizedBoxH(),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: BaseDatePicker(
-                        hint: '00/00/0000',
-                        validator: (value) => value == null
-                            ? 'Campo Obrigatório'
-                            : value.isAfter(DateTime.now().copyWith(
-                                    second: 0,
-                                    microsecond: 0,
-                                    millisecond: 0,
-                                    minute: 0,
-                                    hour: 0))
-                                ? 'A data deve ser anterior à data atual'
-                                : null,
-                        onChanged: (value) => context
-                            .read<ReportsBloc>()
-                            .add(OnInitialDateChanged(value!)),
-                      ),
-                    ),
-                    10.toSizedBoxW(),
-                    Expanded(
-                      child: BaseDatePicker(
-                        hint: '00/00/0000',
-                        validator: (value) => value == null
-                            ? 'Campo Obrigatório'
-                            : value.isAfter(DateTime.now().copyWith(
-                                    second: 0,
-                                    microsecond: 0,
-                                    millisecond: 0,
-                                    minute: 0,
-                                    hour: 0))
-                                ? 'A data deve ser anterior à data atual'
-                                : null,
-                        onChanged: (value) => context.read<ReportsBloc>().add(
-                              OnFinalDateChanged(value!),
-                            ),
-                      ),
-                    ),
-                  ],
-                ),
-                20.toSizedBoxH(),
                 Expanded(
-                  child: BaseList(
-                    items: state.reports,
-                    state: state.state,
-                    onRefresh: () =>
-                        context.read<ReportsBloc>().add(OnBtnClick()),
-                    itemBuilder: (context, item) =>
-                        ProfessionalReportCard(item),
+                  child: BlocBuilder<ReportsBloc, ReportsState>(
+                    buildWhen: (previous, current) => previous.initialDate != current.initialDate || previous.finalDate != current.finalDate,
+                    builder: (context, state) => BaseDatePicker(
+                      hint: '00/00/0000',
+                      initialValue: state.initialDate,
+                      validator: (value) => value == null
+                          ? 'Campo Obrigatório'
+                          : value.isAfter(DateTime.now().copyWith(second: 0, microsecond: 0, millisecond: 0, minute: 0, hour: 0))
+                              ? 'A data deve ser anterior à data atual'
+                              : state.initialDate.isAfter(state.finalDate)
+                                  ? 'Data inicial deve ser anterior à data final'
+                                  : null,
+                      onChanged: (value) => context.read<ReportsBloc>().add(OnInitialDateChanged(value)),
+                    ),
                   ),
                 ),
-                FloatingActionButton.small(
-                  onPressed: () =>
-                      context.read<ReportsBloc>().add(OnBtnClick()),
-                  child: const Icon(
-                    Icons.check,
+                10.toSizedBoxW(),
+                Expanded(
+                  child: BlocBuilder<ReportsBloc, ReportsState>(
+                    buildWhen: (previous, current) => previous.finalDate != current.finalDate || previous.initialDate != current.initialDate,
+                    builder: (context, state) => BaseDatePicker(
+                      hint: '00/00/0000',
+                      initialValue: state.finalDate,
+                      validator: (value) => value == null
+                          ? 'Campo Obrigatório'
+                          : value.isAfter(DateTime.now().copyWith(second: 0, microsecond: 0, millisecond: 0, minute: 0, hour: 0))
+                              ? 'A data deve ser anterior à data atual'
+                              : state.finalDate.isBefore(state.initialDate)
+                                  ? 'Data final deve ser maior que à data inicial'
+                                  : null,
+                      onChanged: (value) => context.read<ReportsBloc>().add(OnFinalDateChanged(value)),
+                    ),
                   ),
                 ),
               ],
             ),
-          );
-        });
+          ),
+          20.toSizedBoxH(),
+          BlocBuilder<ReportsBloc, ReportsState>(
+            buildWhen: (previous, current) => previous.state != current.state,
+            builder: (context, state) {
+              return Expanded(
+                child: BaseList(
+                  items: state.reports,
+                  state: state.state,
+                  onRefresh: () => context.read<ReportsBloc>().add(OnBtnClick()),
+                  itemBuilder: (context, item) => ProfessionalReportCard(item),
+                ),
+              );
+            },
+          ),
+          FloatingActionButton.small(
+            onPressed: () => context.read<ReportsBloc>().add(OnBtnClick()),
+            child: const Icon(Icons.check),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _addTitleDates() {
@@ -145,6 +143,7 @@ class ReportView extends StatelessWidget {
 
 class ProfessionalReportCard extends StatelessWidget {
   final Report report;
+
   const ProfessionalReportCard(this.report, {super.key});
 
   @override
@@ -159,15 +158,12 @@ class ProfessionalReportCard extends StatelessWidget {
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(boxShadow: [
-                    BoxShadow(color: Colors.black87.withOpacity(0.5))
-                  ]),
+                  decoration: BoxDecoration(boxShadow: [BoxShadow(color: Colors.black87.withOpacity(0.5))]),
                   child: Column(
                     children: [
                       Text("Nome: ${report.userName}"),
                       Text("CPF: ${report.userCpf}"),
-                      Text(
-                          "Tempo de trabalho: ${report.totalDuration} minutos"),
+                      Text("Tempo de trabalho: ${report.totalDuration} minutos"),
                       Text("Total recebido: R\$ ${report.totalValue}")
                     ],
                   ),
