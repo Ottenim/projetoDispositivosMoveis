@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 part 'service_form_event.dart';
-
 part 'service_form_state.dart';
 
 class ServiceFormBloc extends Bloc<ServiceFormEvent, ServiceFormState> {
@@ -21,9 +20,12 @@ class ServiceFormBloc extends Bloc<ServiceFormEvent, ServiceFormState> {
     on<ServiceFormInfoChanged>(_onInfoChanged);
     on<ServiceFormAdd>(_onAdd);
     on<ServiceFormUpdate>(_onUpdate);
+    on<ServiceFormDelete>(_onDelete);
 
-    valueMask = MaskTextInputFormatter(mask: 'R\$ ##,##', initialText: service?.value.toString() ?? '');
-    durationMask = MaskTextInputFormatter(mask: '###', initialText: service?.duration.toString());
+    valueMask = MaskTextInputFormatter(
+        mask: 'R\$ ##,##', initialText: service?.value.toString() ?? '');
+    durationMask = MaskTextInputFormatter(
+        mask: '###', initialText: service?.duration.toString());
   }
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -88,16 +90,19 @@ class ServiceFormBloc extends Bloc<ServiceFormEvent, ServiceFormState> {
       try {
         Service service = Service(
           name: state.name,
-          value: double.parse(state.value.replaceFirst(',', '.')),
+          value: double.parse(
+              state.value.replaceFirst('R\$', '').replaceFirst(',', '.')),
           duration: int.parse(state.duration),
           info: state.info,
         );
 
         await services.add(service);
 
-        emit(state.copyWith(state: PageState.success(info: 'Serviço salvo', data: service)));
+        emit(state.copyWith(
+            state: PageState.success(info: 'Serviço salvo', data: service)));
       } catch (e) {
-        emit(state.copyWith(state: PageState.error('Não foi possivel salvar o serviço')));
+        emit(state.copyWith(
+            state: PageState.error('Não foi possivel salvar o serviço')));
       }
     } else {
       emit(state.copyWith(state: PageState.error('Campos incorretos')));
@@ -118,17 +123,34 @@ class ServiceFormBloc extends Bloc<ServiceFormEvent, ServiceFormState> {
             service?.id ?? '',
             newService = service!.copyWith(
               name: state.name,
-              value: double.parse(state.value.replaceFirst('R\$', '').replaceFirst(',', '.')),
+              value: double.parse(
+                  state.value.replaceFirst('R\$', '').replaceFirst(',', '.')),
               duration: int.parse(state.duration),
               info: state.info,
             ));
 
-        emit(state.copyWith(state: PageState.success(info: 'Serviço salvo', data: newService)));
+        emit(state.copyWith(
+            state: PageState.success(info: 'Serviço salvo', data: newService)));
       } catch (e) {
-        emit(state.copyWith(state: PageState.error('Não foi possivel atualizar o serviço')));
+        emit(state.copyWith(
+            state: PageState.error('Não foi possivel atualizar o serviço')));
       }
     } else {
       emit(state.copyWith(state: PageState.error('Campos incorretos')));
+    }
+  }
+
+  FutureOr<void> _onDelete(
+    ServiceFormDelete event,
+    Emitter<ServiceFormState> emit,
+  ) async {
+    emit(state.copyWith(state: PageState.loading('Deletando serviço...')));
+    try {
+      await services.delete(service!.id!);
+      emit(state.copyWith(state: PageState.success()));
+    } catch (e) {
+      emit(state.copyWith(
+          state: PageState.error('Não foi possivel deletar o serviço')));
     }
   }
 }

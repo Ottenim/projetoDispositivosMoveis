@@ -36,3 +36,5 @@ class ServiceFormInfoChanged extends ServiceFormEvent {
 class ServiceFormAdd extends ServiceFormEvent {}
 
 class ServiceFormUpdate extends ServiceFormEvent {}
+
+class ServiceFormDelete extends ServiceFormEvent {}

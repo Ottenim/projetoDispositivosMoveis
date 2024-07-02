@@ -30,27 +30,45 @@ class ServiceFormView extends StatelessWidget {
                       BaseTextField(
                         hint: 'Nome do corte',
                         initialValue: state.name,
-                        validator: (value) => Validador().add(Validar.OBRIGATORIO, msg: 'Campo obrigatório').validar(value),
-                        onChanged: (value) => context.read<ServiceFormBloc>().add(ServiceFormNameChanged(value)),
+                        validator: (value) => Validador()
+                            .add(Validar.OBRIGATORIO, msg: 'Campo obrigatório')
+                            .validar(value),
+                        onChanged: (value) => context
+                            .read<ServiceFormBloc>()
+                            .add(ServiceFormNameChanged(value)),
                       ),
                       BaseTextField(
                         hint: 'Duração',
                         keyboardType: TextInputType.number,
                         initialValue: state.duration,
-                        inputFormatters: [context.read<ServiceFormBloc>().durationMask],
-                        validator: (value) => Validador().add(Validar.OBRIGATORIO, msg: 'Campo obrigatório').validar(value),
-                        onChanged: (value) => context.read<ServiceFormBloc>().add(ServiceFormDurationChanged(value)),
+                        inputFormatters: [
+                          context.read<ServiceFormBloc>().durationMask
+                        ],
+                        validator: (value) => Validador()
+                            .add(Validar.OBRIGATORIO, msg: 'Campo obrigatório')
+                            .validar(value),
+                        onChanged: (value) => context
+                            .read<ServiceFormBloc>()
+                            .add(ServiceFormDurationChanged(value)),
                       ),
                       BlocBuilder<ServiceFormBloc, ServiceFormState>(
-                        buildWhen: (previous, current) => previous.value != current.value,
+                        buildWhen: (previous, current) =>
+                            previous.value != current.value,
                         builder: (context, state) {
                           return BaseTextField(
                             hint: 'Valor',
                             initialValue: state.value,
                             keyboardType: TextInputType.number,
-                            validator: (value) => Validador().add(Validar.OBRIGATORIO, msg: 'Campo obrigatório').validar(value),
-                            inputFormatters: [context.read<ServiceFormBloc>().valueMask],
-                            onChanged: (value) => context.read<ServiceFormBloc>().add(ServiceFormValueChanged(value)),
+                            validator: (value) => Validador()
+                                .add(Validar.OBRIGATORIO,
+                                    msg: 'Campo obrigatório')
+                                .validar(value),
+                            inputFormatters: [
+                              context.read<ServiceFormBloc>().valueMask
+                            ],
+                            onChanged: (value) => context
+                                .read<ServiceFormBloc>()
+                                .add(ServiceFormValueChanged(value)),
                           );
                         },
                       ),
@@ -58,17 +76,34 @@ class ServiceFormView extends StatelessWidget {
                         hint: 'Informação',
                         initialValue: state.info,
                         fieldType: FieldType.expanded,
-                        onChanged: (value) => context.read<ServiceFormBloc>().add(ServiceFormInfoChanged(value)),
+                        onChanged: (value) => context
+                            .read<ServiceFormBloc>()
+                            .add(ServiceFormInfoChanged(value)),
                       ),
                     ],
                   ),
                 ),
                 BaseButton(
-                  title: context.read<ServiceFormBloc>().service == null ? 'Salvar' : 'Atualizar',
-                  onPressed: () => context.read<ServiceFormBloc>().service == null
+                  title: context.read<ServiceFormBloc>().service == null
+                      ? 'Salvar'
+                      : 'Atualizar',
+                  onPressed: () => context.read<ServiceFormBloc>().service ==
+                          null
                       ? context.read<ServiceFormBloc>().add(ServiceFormAdd())
-                      : context.read<ServiceFormBloc>().add(ServiceFormUpdate()),
+                      : context
+                          .read<ServiceFormBloc>()
+                          .add(ServiceFormUpdate()),
                 ),
+                16.toSizedBoxH(),
+                context.read<ServiceFormBloc>().service == null
+                    ? 0.toSizedBoxH()
+                    : BaseButton(
+                        title: 'Excluir',
+                        type: ButtonType.secondary,
+                        onPressed: () => context
+                            .read<ServiceFormBloc>()
+                            .add(ServiceFormDelete()),
+                      ),
                 16.toSizedBoxH(),
                 BaseButton(
                   title: 'Cancelar',
