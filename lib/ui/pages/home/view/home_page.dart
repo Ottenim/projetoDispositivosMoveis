@@ -5,6 +5,7 @@ import 'package:barber/repositories/repositories.dart';
 import 'package:barber/ui/pages/home/bloc/home_bloc.dart';
 import 'package:barber/ui/pages/location/view/location_page.dart';
 import 'package:barber/ui/pages/login/login.dart';
+import 'package:barber/ui/pages/maze/view/maze_page.dart';
 import 'package:barber/ui/pages/professional_register/view/professional_register_page.dart';
 import 'package:barber/ui/pages/profile/view/view.dart';
 import 'package:barber/ui/pages/reports/view/report_page.dart';
@@ -177,6 +178,12 @@ class HomeButtons extends StatelessWidget {
             title: "Relatório",
             icon: 'assets/icons/reports.svg',
             onTap: () => Navigator.of(context).push(ReportPage.route()),
+          ),
+          12.toSizedBoxH(),
+          HomeCard(
+            title: "Maze",
+            icon: 'assets/icons/flag.svg',
+            onTap: () => Navigator.of(context).push(MazePage.route()),
           )
         ],
       ),
