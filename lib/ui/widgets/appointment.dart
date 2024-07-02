@@ -30,7 +30,7 @@ class AgendamentoWidget extends StatelessWidget {
           'Data: $date\nServiço: $service\nProfissional: $attendant',
           style: TextStyle(color: Colors.white, fontSize: 12),
         ),
-        trailing: GestureDetector(
+        /*trailing: GestureDetector(
           onTap: () {
             // Função onTap vazia por enquanto
           },
@@ -39,7 +39,7 @@ class AgendamentoWidget extends StatelessWidget {
             color: Colors.white,
           ),
           behavior: HitTestBehavior.opaque,
-        ),
+        ),*/
       ),
     );
   }
