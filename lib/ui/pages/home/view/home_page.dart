@@ -163,9 +163,9 @@ class HomeButtons extends StatelessWidget {
             icon: 'assets/icons/location.svg',
             onTap: () => Navigator.of(context).push(LocationPage.route()),
           ),
-          12.toSizedBoxH(),
           ...activeUser.userCategory == UserCategory.admin
               ? [
+                  12.toSizedBoxH(),
                   HomeCard(
                     title: "Cadastro de profissionais",
                     icon: 'assets/icons/professional.svg',
@@ -173,12 +173,16 @@ class HomeButtons extends StatelessWidget {
                   )
                 ]
               : [],
-          12.toSizedBoxH(),
-          HomeCard(
-            title: "Relatório",
-            icon: 'assets/icons/reports.svg',
-            onTap: () => Navigator.of(context).push(ReportPage.route()),
-          ),
+          ...activeUser.userCategory == UserCategory.admin
+              ? [
+                  12.toSizedBoxH(),
+                  HomeCard(
+                    title: "Relatório",
+                    icon: 'assets/icons/reports.svg',
+                    onTap: () => Navigator.of(context).push(ReportPage.route()),
+                  ),
+                ]
+              : [],
           12.toSizedBoxH(),
           HomeCard(
             title: "Maze",
