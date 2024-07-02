@@ -77,12 +77,20 @@ class ProfessionalSelection extends StatelessWidget {
             onTap: () => context.read<ScheduleBloc>().add(ScheduleProfessionalChanged(user)),
             child: Column(
               children: [
-                CircleAvatar(
-                  radius: 35,
-                  backgroundColor: user.id == state.selectedProfessional?.id ? Color(0xFFFFF112) : Colors.transparent,
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(50),
+                  ),
                   child: CircleAvatar(
-                    radius: 33,
-                    backgroundImage: AssetImage('assets/images/janei.jpg'),
+                    radius: 35,
+                    backgroundColor: user.id == state.selectedProfessional?.id ? Color(0xFFFFF112) : Colors.transparent,
+                    child: user.imageUrl?.isNotEmpty == true
+                        ? CircleAvatar(
+                            radius: 33,
+                            backgroundImage: NetworkImage(user.imageUrl ?? ''),
+                          )
+                        : Icon(Icons.camera_alt, color: Colors.black),
                   ),
                 ),
                 SizedBox(height: 8),
