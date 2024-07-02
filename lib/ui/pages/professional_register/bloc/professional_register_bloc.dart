@@ -7,10 +7,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 part 'professional_register_event.dart';
+
 part 'professional_register_state.dart';
 
-class ProfessionalRegisterBloc
-    extends Bloc<ProfessionalRegisterEvent, ProfessionalRegisterState> {
+class ProfessionalRegisterBloc extends Bloc<ProfessionalRegisterEvent, ProfessionalRegisterState> {
   ProfessionalRegisterBloc() : super(ProfessionalRegisterState()) {
     on<UsersFetch>(_onFetch);
     on<UserCategoryChanged>(_onUserCategoryChanged);
@@ -40,10 +40,15 @@ class ProfessionalRegisterBloc
     emit(state.copyWith(itemState: PageState.loading()));
 
     try {
-      await userService.updateUser(event.user.id!,
-          event.user.copyWith(userCategory: event.userCategory));
+      User updatedUser = event.user.copyWith(userCategory: event.userCategory);
 
-      emit(state.copyWith(itemState: PageState.success(data: event.user)));
+      await userService.updateUser(event.user.id!, updatedUser);
+
+      List<User> newUsers = List.of(state.users)
+        ..remove(event.user)
+        ..add(updatedUser);
+
+      emit(state.copyWith(itemState: PageState.success(data: event.user), users: newUsers));
     } catch (e) {
       emit(state.copyWith(itemState: PageState.error()));
     }

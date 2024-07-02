@@ -32,9 +32,12 @@ class ScheduleView extends StatelessWidget {
                     children: [
                       Subtitle("Selecione o profissional"),
                       SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: state.professionals.map((e) => ProfessionalSelection(e)).toList(),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: state.professionals.map((e) => ProfessionalSelection(e)).toList(),
+                        ),
                       ),
                       SizedBox(height: 15),
                       DateTimeSelector(),
@@ -65,27 +68,30 @@ class ProfessionalSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ScheduleBloc, ScheduleState>(
-      buildWhen: (previous, current) => previous.selectedProfessional != current.selectedProfessional,
-      builder: (context, state) {
-        return GestureDetector(
-          onTap: () => context.read<ScheduleBloc>().add(ScheduleProfessionalChanged(user)),
-          child: Column(
-            children: [
-              CircleAvatar(
-                radius: 35,
-                backgroundColor: user.id == state.selectedProfessional?.id ? Color(0xFFFFF112) : Colors.transparent,
-                child: CircleAvatar(
-                  radius: 33,
-                  backgroundImage: AssetImage('assets/images/janei.jpg'),
+    return Container(
+      padding: const EdgeInsets.all(8),
+      child: BlocBuilder<ScheduleBloc, ScheduleState>(
+        buildWhen: (previous, current) => previous.selectedProfessional != current.selectedProfessional,
+        builder: (context, state) {
+          return GestureDetector(
+            onTap: () => context.read<ScheduleBloc>().add(ScheduleProfessionalChanged(user)),
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 35,
+                  backgroundColor: user.id == state.selectedProfessional?.id ? Color(0xFFFFF112) : Colors.transparent,
+                  child: CircleAvatar(
+                    radius: 33,
+                    backgroundImage: AssetImage('assets/images/janei.jpg'),
+                  ),
                 ),
-              ),
-              SizedBox(height: 8),
-              Text(user.name ?? '', style: TextStyle(color: Colors.white)),
-            ],
-          ),
-        );
-      },
+                SizedBox(height: 8),
+                Text(user.name ?? '', style: TextStyle(color: Colors.white)),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

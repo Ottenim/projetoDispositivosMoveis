@@ -16,8 +16,7 @@ class ProfessionalRegisterView extends StatelessWidget {
           return BaseList(
             items: state.users,
             state: state.state,
-            onRefresh: () =>
-                context.read<ProfessionalRegisterBloc>().add(UsersFetch()),
+            onRefresh: () => context.read<ProfessionalRegisterBloc>().add(UsersFetch()),
             itemBuilder: (context, item) => ProfessionalCard(item),
           );
         });
@@ -31,36 +30,39 @@ class ProfessionalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseCard(
-        onTap: () => context.read<ProfessionalRegisterBloc>().add(
-            UserCategoryChanged(
-                user,
-                user.userCategory == UserCategory.client
-                    ? UserCategory.barber
-                    : UserCategory.client)),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.only(left: 25),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(user.name!),
-                    Checkbox(
-                      checkColor: const Color(0xffFFF112),
-                      value: user.userCategory == UserCategory.barber,
-                      onChanged: (bool? value) {},
-                    ),
-                  ],
+    return BlocBuilder<ProfessionalRegisterBloc, ProfessionalRegisterState>(
+      buildWhen: (previous, current) => previous.users != current.users,
+      builder: (context, state) {
+        return BaseCard(
+          onTap: () => context
+              .read<ProfessionalRegisterBloc>()
+              .add(UserCategoryChanged(user, user.userCategory == UserCategory.client ? UserCategory.barber : UserCategory.client)),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.only(left: 25),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(user.name!),
+                      Checkbox(
+                        checkColor: const Color(0xffFFF112),
+                        value: state.users.firstWhere((element) => element.id == user.id).userCategory == UserCategory.barber,
+                        onChanged: (bool? value) {},
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ));
+            ],
+          ),
+        );
+      },
+    );
   }
 }

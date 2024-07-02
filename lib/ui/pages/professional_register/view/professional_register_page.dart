@@ -7,8 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ProfessionalRegisterPage extends StatelessWidget {
-  static Route route() =>
-      MaterialPageRoute(builder: (context) => const ProfessionalRegisterPage());
+  static Route route() => MaterialPageRoute(builder: (context) => const ProfessionalRegisterPage());
 
   const ProfessionalRegisterPage({super.key});
 
@@ -17,12 +16,11 @@ class ProfessionalRegisterPage extends StatelessWidget {
     return BlocProvider<ProfessionalRegisterBloc>(
       create: (context) => ProfessionalRegisterBloc()..add(UsersFetch()),
       child: BlocListener<ProfessionalRegisterBloc, ProfessionalRegisterState>(
-        listenWhen: (previous, current) =>
-            previous.itemState != current.itemState,
+        listenWhen: (previous, current) => previous.itemState != current.itemState,
         listener: (context, state) async {
           if (state.itemState.status == PageStatus.success) {
             Fluttertoast.showToast(msg: "Categoria do usuário atualizada");
-          } else {
+          } else if (state.itemState.status == PageStatus.error) {
             Fluttertoast.showToast(msg: "Erro ao salvar categoria do usuário");
           }
         },
