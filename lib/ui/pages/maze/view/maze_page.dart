@@ -26,13 +26,7 @@ class _MazePageState extends State<MazePage> {
           wallThickness: 4.0,
           wallColor: Theme.of(context).primaryColor,
           finish: MazeItem('https://cdn-icons-png.flaticon.com/512/4744/4744812.png', ImageType.network),
-          onFinish: () async {
-            Fluttertoast.showToast(msg: 'Parabéns você chegou ao final!!');
-
-            await Future.delayed(Duration(seconds: 1));
-
-            Navigator.of(context).pop();
-          },
+          onFinish: () => Fluttertoast.showToast(msg: 'Parabéns você chegou ao final!!'),
         )));
   }
 }
